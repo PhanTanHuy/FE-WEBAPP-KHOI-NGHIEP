@@ -1,0 +1,121 @@
+export const materials = [
+  {
+    id: 1,
+    title: "Đề thi thử THPTQG 2024 môn Toán - Đề 1",
+    subject: "Toán",
+    type: "exam",
+    level: "THPT",
+    description: "Đề thi thử THPTQG 2024 với đáp án chi tiết, bám sát cấu trúc đề thi chính thức",
+    downloads: 2540,
+    pages: 12,
+    fileSize: "2.4 MB",
+    date: "2024-10-01",
+    tags: ["THPTQG", "2024", "Giải tích"],
+    thumbnail: "toan"
+  },
+  {
+    id: 2,
+    title: "Tổng hợp ngữ pháp Tiếng Anh IELTS",
+    subject: "Tiếng Anh",
+    type: "material",
+    level: "THPT",
+    description: "Tổng hợp đầy đủ các cấu trúc ngữ pháp quan trọng cho kỳ thi IELTS",
+    downloads: 3820,
+    pages: 48,
+    fileSize: "5.1 MB",
+    date: "2024-09-15",
+    tags: ["IELTS", "Grammar", "Ngữ pháp"],
+    thumbnail: "anh"
+  },
+  {
+    id: 3,
+    title: "Công thức Vật lý THPT - Đầy đủ",
+    subject: "Vật lý",
+    type: "material",
+    level: "THPT",
+    description: "Tổng hợp toàn bộ công thức Vật lý từ lớp 10 đến lớp 12 có ví dụ minh họa",
+    downloads: 1890,
+    pages: 36,
+    fileSize: "3.2 MB",
+    date: "2024-09-20",
+    tags: ["Công thức", "Tóm tắt", "THPT"],
+    thumbnail: "ly"
+  },
+  {
+    id: 4,
+    title: "Bộ đề Hóa học hữu cơ - 50 đề",
+    subject: "Hóa học",
+    type: "exercise",
+    level: "THPT",
+    description: "50 đề luyện tập Hóa hữu cơ từ cơ bản đến nâng cao, kèm đáp án",
+    downloads: 1250,
+    pages: 80,
+    fileSize: "7.8 MB",
+    date: "2024-10-10",
+    tags: ["Hữu cơ", "Bài tập", "Đề luyện"],
+    thumbnail: "hoa"
+  },
+  {
+    id: 5,
+    title: "Sơ đồ tư duy Lịch sử Việt Nam",
+    subject: "Lịch sử",
+    type: "material",
+    level: "THPT",
+    description: "Sơ đồ tư duy toàn bộ kiến thức Lịch sử Việt Nam từ 1945 đến 2000",
+    downloads: 987,
+    pages: 24,
+    fileSize: "4.5 MB",
+    date: "2024-08-30",
+    tags: ["Sơ đồ tư duy", "Lịch sử VN"],
+    thumbnail: "su"
+  },
+  {
+    id: 6,
+    title: "Python cơ bản cho người mới bắt đầu",
+    subject: "Tin học",
+    type: "material",
+    level: "THCS",
+    description: "Tài liệu học Python từ cơ bản: biến, vòng lặp, hàm, OOP với nhiều ví dụ thực hành",
+    downloads: 4210,
+    pages: 64,
+    fileSize: "6.2 MB",
+    date: "2024-10-05",
+    tags: ["Python", "Lập trình", "Cơ bản"],
+    thumbnail: "tin"
+  },
+  {
+    id: 7,
+    title: "Đề thi vào lớp 10 Toán TP.HCM 2024",
+    subject: "Toán",
+    type: "exam",
+    level: "THCS",
+    description: "Đề thi chính thức và đáp án kỳ thi tuyển sinh lớp 10 TP.HCM năm 2024",
+    downloads: 5670,
+    pages: 8,
+    fileSize: "1.8 MB",
+    date: "2024-06-15",
+    tags: ["Tuyển sinh 10", "TP.HCM", "Đề chính thức"],
+    thumbnail: "toan"
+  },
+  {
+    id: 8,
+    title: "1000 từ vựng Tiếng Anh thông dụng",
+    subject: "Tiếng Anh",
+    type: "material",
+    level: "THCS",
+    description: "Danh sách 1000 từ vựng tiếng Anh thông dụng nhất theo chủ đề, kèm phiên âm và ví dụ",
+    downloads: 6320,
+    pages: 55,
+    fileSize: "4.0 MB",
+    date: "2024-07-20",
+    tags: ["Từ vựng", "Cơ bản", "THCS"],
+    thumbnail: "anh"
+  }
+];
+
+export const materialTypes = [
+  { id: "all", name: "Tất cả" },
+  { id: "exam", name: "Đề thi" },
+  { id: "material", name: "Tài liệu" },
+  { id: "exercise", name: "Bài tập" }
+];
