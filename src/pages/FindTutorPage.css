@@ -166,13 +166,13 @@
 
 .clear-all-btn:hover { background: var(--danger-light); }
 
-.filter-section {
+.find-tutor-page .filter-section {
   border-bottom: 1px solid var(--gray-100);
 }
 
-.filter-section:last-child { border-bottom: none; }
+.find-tutor-page .filter-section:last-child { border-bottom: none; }
 
-.filter-section-header {
+.find-tutor-page .filter-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -188,7 +188,7 @@
   transition: background var(--transition-fast);
 }
 
-.filter-section-header:hover { background: var(--gray-50); }
+.find-tutor-page .filter-section-header:hover { background: var(--gray-50); }
 
 .filter-arrow {
   transition: transform var(--transition-fast);
@@ -196,7 +196,7 @@
 
 .filter-arrow.open { transform: rotate(180deg); }
 
-.filter-section-body {
+.find-tutor-page .filter-section-body {
   padding: var(--space-sm) var(--space-lg) var(--space-md);
 }
 

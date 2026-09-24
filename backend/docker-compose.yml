@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: educonnect
+      POSTGRES_USER: educonnect
+      POSTGRES_PASSWORD: educonnect
+    ports:
+      - "5432:5432"
+    volumes:
+      - educonnect_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U educonnect -d educonnect"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  educonnect_postgres_data:

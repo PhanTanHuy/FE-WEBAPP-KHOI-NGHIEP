@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Search,
@@ -16,6 +16,8 @@ import {
     Languages,
     X
 } from 'lucide-react';
+import { getTutors } from '../api/tutors';
+import { getSubjects } from '../api/subjects';
 
 import './OnlineTutorPage.css';
 
@@ -24,141 +26,9 @@ import './OnlineTutorPage.css';
    DỮ LIỆU GIA SƯ
    ========================================================= */
 
-const tutors = [
-    {
-        id: 1,
-        name: 'Nguyễn Hoàng Anh',
-        avatar: 'https://i.pravatar.cc/150?img=47',
-        subject: 'Tiếng Anh',
-        tags: ['IELTS', 'Tiếng Anh', 'Giao tiếp'],
-        experience: '3 năm',
-        rating: 4.9,
-        reviews: 120,
-        lessons: 150,
-        price: 200000,
-        online: true,
-        available: true,
-        description: 'Chuyên luyện IELTS và giao tiếp tiếng Anh.'
-    },
-    {
-        id: 2,
-        name: 'Trần Minh Đức',
-        avatar: 'https://i.pravatar.cc/150?img=12',
-        subject: 'Toán',
-        tags: ['Toán', 'Vật lý', 'Luyện thi ĐH'],
-        experience: '4 năm',
-        rating: 4.8,
-        reviews: 96,
-        lessons: 320,
-        price: 250000,
-        online: true,
-        available: true,
-        description: 'Gia sư Toán chuyên luyện thi THPT.'
-    },
-    {
-        id: 3,
-        name: 'Lê Thùy Linh',
-        avatar: 'https://i.pravatar.cc/150?img=44',
-        subject: 'Ngữ văn',
-        tags: ['Ngữ văn', 'Kỹ năng viết', 'THCS'],
-        experience: '3 năm',
-        rating: 4.9,
-        reviews: 85,
-        lessons: 190,
-        price: 180000,
-        online: true,
-        available: true,
-        description: 'Hỗ trợ học sinh THCS và THPT môn Ngữ văn.'
-    },
-    {
-        id: 4,
-        name: 'Phạm Gia Huy',
-        avatar: 'https://i.pravatar.cc/150?img=11',
-        subject: 'Tiếng Trung',
-        tags: ['Tiếng Trung', 'HSK', 'Giao tiếp'],
-        experience: '5 năm',
-        rating: 4.9,
-        reviews: 110,
-        lessons: 260,
-        price: 220000,
-        online: true,
-        available: true,
-        description: 'Tiếng Trung giao tiếp và luyện thi HSK.'
-    },
-    {
-        id: 5,
-        name: 'Trần Ngọc Mai',
-        avatar: 'https://i.pravatar.cc/150?img=45',
-        subject: 'Tiếng Nhật',
-        tags: ['Tiếng Nhật', 'JLPT', 'Giao tiếp'],
-        experience: '3 năm',
-        rating: 4.8,
-        reviews: 72,
-        lessons: 90,
-        price: 180000,
-        online: true,
-        available: true,
-        description: 'Luyện JLPT và giao tiếp tiếng Nhật.'
-    },
-    {
-        id: 6,
-        name: 'Hoàng Văn Phúc',
-        avatar: 'https://i.pravatar.cc/150?img=13',
-        subject: 'Hóa học',
-        tags: ['Hóa học', 'Sinh học', 'Luyện thi ĐH'],
-        experience: '5 năm',
-        rating: 4.9,
-        reviews: 101,
-        lessons: 280,
-        price: 300000,
-        online: true,
-        available: false,
-        description: 'Chuyên ôn thi THPT môn Hóa học.'
-    },
-    {
-        id: 7,
-        name: 'Đỗ Bảo Ngọc',
-        avatar: 'https://i.pravatar.cc/150?img=48',
-        subject: 'Tiếng Anh',
-        tags: ['Tiếng Anh', 'IELTS', 'Phát âm'],
-        experience: '2 năm',
-        rating: 4.7,
-        reviews: 92,
-        lessons: 160,
-        price: 220000,
-        online: true,
-        available: true,
-        description: 'Tiếng Anh giao tiếp và phát âm.'
-    },
-    {
-        id: 8,
-        name: 'Lý Minh Khôi',
-        avatar: 'https://i.pravatar.cc/150?img=14',
-        subject: 'Toán',
-        tags: ['Toán', 'THCS', 'Luyện thi vào 10'],
-        experience: '4 năm',
-        rating: 4.8,
-        reviews: 134,
-        lessons: 360,
-        price: 250000,
-        online: true,
-        available: true,
-        description: 'Toán THCS và luyện thi vào lớp 10.'
-    }
-];
-
-
-const subjects = [
-    'Toán',
-    'Vật lý',
-    'Hóa học',
-    'Sinh học',
-    'Ngữ văn',
-    'Tiếng Anh',
-    'Tiếng Trung',
-    'Tiếng Nhật',
-    'IELTS',
-    'Khác'
+const defaultSubjects = [
+    'Toán', 'Ngữ văn', 'Tiếng Anh', 'Vật lý', 'Hóa học', 'Sinh học',
+    'Lịch sử', 'Địa lý', 'Tin học', 'Lập trình', 'Kinh tế', 'Âm nhạc'
 ];
 
 
@@ -182,12 +52,87 @@ const quickFilters = [
     'Tiếng Nhật'
 ];
 
+const pageContentByMode = {
+    online: {
+        breadcrumb: 'Gia sư online',
+        title: 'Gia sư online –',
+        subtitle: 'Học mọi lúc, mọi nơi',
+        description:
+            'Kết nối với gia sư chất lượng qua lớp học trực tuyến. Linh hoạt thời gian, tiết kiệm chi phí, hiệu quả vượt trội.',
+        typeLabel: 'Gia sư online',
+        resultLabel: 'gia sư online phù hợp',
+        statusLabel: 'Online',
+        sessionLabel: 'Học trực tuyến',
+        sessionStatus: '● Đang kết nối'
+    },
+    offline: {
+        breadcrumb: 'Gia sư tại nhà',
+        title: 'Gia sư tại nhà –',
+        subtitle: 'Đồng hành sát sao',
+        description:
+            'Kết nối với gia sư phù hợp ngay tại khu vực của bạn. Học trực tiếp, theo sát tiến độ và linh hoạt lịch học.',
+        typeLabel: 'Gia sư tại nhà',
+        resultLabel: 'gia sư tại nhà phù hợp',
+        statusLabel: 'Tại nhà',
+        sessionLabel: 'Học tại nhà',
+        sessionStatus: '● Sẵn sàng nhận lớp'
+    }
+};
+
 
 /* =========================================================
    COMPONENT
    ========================================================= */
 
-export default function OnlineTutorPage() {
+export default function OnlineTutorPage({ mode = 'online' }) {
+    const [tutorsList, setTutorsList] = useState([]);
+    const [subjectsList, setSubjectsList] = useState(defaultSubjects);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let isMounted = true;
+        setLoading(true);
+        Promise.all([
+            getTutors({ mode, paginate: false }),
+            getSubjects()
+        ]).then(([tutorsData, subjectsData]) => {
+            if (isMounted) {
+                const list = Array.isArray(tutorsData) ? tutorsData : (tutorsData?.items || []);
+                setTutorsList(list);
+                if (subjectsData && subjectsData.length > 0) {
+                    setSubjectsList(subjectsData.map(s => s.name));
+                }
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.error('Error fetching online tutors:', err);
+            if (isMounted) setLoading(false);
+        });
+        return () => { isMounted = false; };
+    }, [mode]);
+
+    const tutors = useMemo(() => {
+        return tutorsList.map((tutor) => ({
+            id: tutor.id,
+            name: tutor.name,
+            avatar: tutor.avatar,
+            subject: tutor.subjects?.[0] || 'Toán',
+            tags: [...(tutor.subjects || []), ...(tutor.levels || [])],
+            experience: `${tutor.experience} năm`,
+            rating: tutor.rating,
+            reviews: tutor.reviewCount,
+            lessons: tutor.completedLessons,
+            price: tutor.pricePerHour,
+            online: tutor.teachingMode?.includes('online'),
+            offline: tutor.teachingMode?.includes('offline'),
+            available: true,
+            description: tutor.bio
+        }));
+    }, [tutorsList]);
+
+    const subjects = subjectsList;
+
+    const pageContent = pageContentByMode[mode] ?? pageContentByMode.online;
 
     const [search, setSearch] = useState('');
 
@@ -205,7 +150,7 @@ export default function OnlineTutorPage() {
 
     const [selectedRating, setSelectedRating] = useState('');
 
-    const [selectedType, setSelectedType] = useState('');
+    const [selectedType, setSelectedType] = useState(mode);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -293,10 +238,10 @@ export default function OnlineTutorPage() {
 
 
         /* Type */
-        if (selectedType === 'online') {
+        if (selectedType) {
 
             result = result.filter(
-                (tutor) => tutor.online
+                (tutor) => tutor[selectedType]
             );
 
         }
@@ -358,7 +303,7 @@ export default function OnlineTutorPage() {
 
         setSelectedRating('');
 
-        setSelectedType('');
+        setSelectedType(mode);
 
         setSortBy('Phù hợp nhất');
 
@@ -407,7 +352,7 @@ export default function OnlineTutorPage() {
                         <span>›</span>
 
                         <span className="current">
-                            Gia sư online
+                            {pageContent.breadcrumb}
                         </span>
 
                     </div>
@@ -724,21 +669,21 @@ export default function OnlineTutorPage() {
                             <input
                                 type="checkbox"
                                 checked={
-                                    selectedType === 'online'
+                                    selectedType === mode
                                 }
                                 onChange={() => {
 
                                     setSelectedType(
-                                        selectedType === 'online'
+                                        selectedType === mode
                                             ? ''
-                                            : 'online'
+                                            : mode
                                     );
 
                                 }}
                             />
 
                             <span>
-                                Gia sư online
+                                {pageContent.typeLabel}
                             </span>
 
                         </label>
@@ -778,15 +723,13 @@ export default function OnlineTutorPage() {
                             </span>
 
                             <h1>
-                                Gia sư online –
+                                {pageContent.title}
                                 <br />
-                                Học mọi lúc, mọi nơi
+                                {pageContent.subtitle}
                             </h1>
 
                             <p>
-                                Kết nối với gia sư chất lượng qua lớp
-                                học trực tuyến. Linh hoạt thời gian,
-                                tiết kiệm chi phí, hiệu quả vượt trội.
+                                {pageContent.description}
                             </p>
 
 
@@ -866,7 +809,7 @@ export default function OnlineTutorPage() {
 
                                 <img
                                     src="https://i.pravatar.cc/350?img=47"
-                                    alt="Gia sư online"
+                                    alt={pageContent.breadcrumb}
                                 />
 
                             </div>
@@ -884,11 +827,11 @@ export default function OnlineTutorPage() {
                                 <div className="video-info">
 
                                     <strong>
-                                        Học trực tuyến
+                                        {pageContent.sessionLabel}
                                     </strong>
 
                                     <span>
-                                        ● Đang kết nối
+                                        {pageContent.sessionStatus}
                                     </span>
 
                                 </div>
@@ -1054,7 +997,7 @@ export default function OnlineTutorPage() {
 
                         <strong>
                             Hiển thị {filteredTutors.length}{' '}
-                            gia sư online phù hợp
+                            {pageContent.resultLabel}
                         </strong>
 
                         <div className="view-buttons">
@@ -1087,6 +1030,7 @@ export default function OnlineTutorPage() {
                                         key={tutor.id}
                                         tutor={tutor}
                                         formatPrice={formatPrice}
+                                        mode={mode}
                                     />
 
                                 )
@@ -1232,7 +1176,8 @@ function FilterSection({
 
 function TutorCard({
     tutor,
-    formatPrice
+    formatPrice,
+    mode
 }) {
 
     return (
@@ -1254,7 +1199,7 @@ function TutorCard({
                     {tutor.available && (
 
                         <span className="online-status">
-                            Online
+                            {pageContentByMode[mode]?.statusLabel ?? 'Online'}
                         </span>
 
                     )}
@@ -1378,7 +1323,7 @@ function TutorCard({
                 </Link>
 
                 <Link
-                    to={`/dat-lich?tutor=${tutor.id}`}
+                    to={`/dat-lich?tutorId=${tutor.id}`}
                     className="book-button"
                 >
                     Đặt lịch học

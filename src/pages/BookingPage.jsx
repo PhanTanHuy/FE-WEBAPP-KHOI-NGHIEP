@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { Calendar, Clock, BookOpen, MapPin, Video, Home, CheckCircle, ArrowLeft } from 'lucide-react';
-import { tutors } from '../data/tutors';
-import { subjects } from '../data/subjects';
+import { Clock, Video, Home, CheckCircle, ArrowLeft } from 'lucide-react';
+import { getTutorById } from '../api/tutors';
+import { createBooking } from '../api/bookings';
+import { useAuth } from '../context/AuthContext';
 import './BookingPage.css';
 
 const timeSlots = [
@@ -14,7 +15,6 @@ export default function BookingPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const tutorId = searchParams.get('tutorId');
-  const selectedTutor = tutors.find(t => t.id === parseInt(tutorId));
 
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -27,18 +27,73 @@ export default function BookingPage() {
     note: '',
     sessions: 1,
   });
+  
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [tutor, setTutor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!tutorId) {
+      setLoading(false);
+      return;
+    }
+    const fetchTutor = async () => {
+      try {
+        const data = await getTutorById(tutorId);
+        setTutor(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTutor();
+  }, [tutorId]);
 
   const handleChange = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 
   const handleNext = () => setStep(s => s + 1);
   const handleBack = () => setStep(s => s - 1);
 
-  const handleSubmit = () => {
-    setSubmitted(true);
+  const handleSubmit = async () => {
+    if (!user) {
+      alert("Bạn cần đăng nhập để đặt lịch");
+      navigate('/dang-nhap');
+      return;
+    }
+    try {
+      setSubmitting(true);
+      const [start_time, end_time] = form.timeSlot.split(' - ');
+      
+      const payload = {
+        tutor_id: parseInt(tutorId),
+        subject_id: null,
+        date: form.date,
+        start_time: `${start_time.trim()}:00`,
+        end_time: `${end_time.trim()}:00`,
+        notes: `${form.note} | Cấp học: ${form.level} | Môn: ${form.subject} | Hình thức: ${form.mode}`
+      };
+
+      await createBooking(payload);
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert('Có lỗi xảy ra khi đặt lịch. Vui lòng thử lại.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const tutor = selectedTutor || tutors[0];
+  if (loading) {
+    return <div className="booking-page"><div className="container" style={{padding: '80px 0', textAlign: 'center'}}>Đang tải thông tin gia sư...</div></div>;
+  }
+
+  if (!tutor) {
+    return <div className="booking-page"><div className="container" style={{padding: '80px 0', textAlign: 'center'}}>Không tìm thấy gia sư!</div></div>;
+  }
+
   const totalPrice = tutor.pricePerHour * 2 * form.sessions; // 2 hours per session
 
   if (submitted) {
@@ -71,7 +126,7 @@ export default function BookingPage() {
               </div>
             </div>
             <div className="success-actions">
-              <Link to="/tien-do" className="btn btn-primary btn-lg">
+              <Link to="/quan-ly-dat-lich" className="btn btn-primary btn-lg">
                 Xem lịch học của tôi
               </Link>
               <Link to="/tim-gia-su" className="btn btn-outline btn-lg">
@@ -318,10 +373,11 @@ export default function BookingPage() {
                   <button
                     className="btn btn-primary"
                     onClick={handleSubmit}
+                    disabled={submitting}
                     id="booking-confirm"
                   >
                     <CheckCircle size={16} />
-                    Xác nhận đặt lịch
+                    {submitting ? 'Đang gửi...' : 'Xác nhận đặt lịch'}
                   </button>
                 </div>
               </div>

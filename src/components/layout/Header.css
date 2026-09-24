@@ -603,3 +603,5 @@
     width: 100%;
   }
 }
+.header__user-menu { display: flex; align-items: center; gap: 0.5rem; }
+.user-name { font-weight: 500; font-size: 0.9rem; color: var(--text-color); margin-left: 0.5rem; }

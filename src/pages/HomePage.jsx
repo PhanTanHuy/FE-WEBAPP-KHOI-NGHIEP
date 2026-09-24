@@ -6,8 +6,10 @@ import {
   Laptop, Home, GraduationCap, Clock, MapPin, TrendingUp
 } from 'lucide-react';
 import TutorCard from '../components/ui/TutorCard';
-import { featuredTutors } from '../data/tutors';
-import { subjects } from '../data/subjects';
+import { featuredTutors as defaultFeaturedTutors } from '../data/tutors';
+import { subjects as defaultSubjects } from '../data/subjects';
+import { getTutors } from '../api/tutors';
+import { getSubjects } from '../api/subjects';
 import './HomePage.css';
 
 const stats = [
@@ -51,7 +53,7 @@ const services = [
     desc: 'Học trực tuyến qua video call với gia sư uy tín. Linh hoạt thời gian, tiết kiệm chi phí đi lại.',
     color: '#3B82F6',
     bg: '#EFF6FF',
-    link: '/tim-gia-su?mode=online'
+    link: '/gia-su-online'
   },
   {
     icon: <Home size={32} />,
@@ -59,7 +61,7 @@ const services = [
     desc: 'Gia sư đến tận nhà dạy kèm. Môi trường học tập quen thuộc, tập trung và hiệu quả hơn.',
     color: '#10B981',
     bg: '#ECFDF5',
-    link: '/tim-gia-su?mode=offline'
+    link: '/gia-su-tai-nha'
   },
   {
     icon: <Play size={32} />,
@@ -67,7 +69,7 @@ const services = [
     desc: 'Trải nghiệm 1 buổi học thử miễn phí với gia sư trước khi quyết định. Không rủi ro, không ràng buộc.',
     color: '#F59E0B',
     bg: '#FFFBEB',
-    link: '/tim-gia-su'
+    link: '/hoc-thu'
   },
   {
     icon: <Shield size={32} />,
@@ -105,9 +107,28 @@ const testimonials = [
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [subjectsList, setSubjectsList] = useState(defaultSubjects);
+  const [featuredTutorsList, setFeaturedTutorsList] = useState(defaultFeaturedTutors);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getSubjects()
+      .then((data) => {
+        if (data && data.length > 0) setSubjectsList(data);
+      })
+      .catch((err) => console.warn('Could not fetch subjects from API, using default:', err));
+
+    getTutors({ paginate: false })
+      .then((data) => {
+        const list = Array.isArray(data) ? data : (data?.items || []);
+        if (list && list.length > 0) {
+          const featured = list.filter((t) => t.verified && t.rating >= 4.8);
+          setFeaturedTutorsList(featured.length > 0 ? featured : list);
+        }
+      })
+      .catch((err) => console.warn('Could not fetch tutors from API, using default:', err));
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -120,10 +141,6 @@ export default function HomePage() {
     e.preventDefault();
     navigate(`/tim-gia-su${searchQuery ? `?q=${encodeURIComponent(searchQuery)}` : ''}`);
   };
-
-  const filteredSubjects = activeTab === 'all'
-    ? subjects
-    : subjects.filter(s => s.id === activeTab);
 
   return (
     <div className="home-page">
@@ -140,7 +157,7 @@ export default function HomePage() {
           <div className="hero__text animate-fadeInUp">
             <div className="hero__badge">
               <Zap size={14} />
-              <span>Nền tảng #1 kết nối gia sư tại Việt Nam</span>
+              <span>Nền tảng uy tín kết nối gia sư tại Việt Nam</span>
             </div>
             <h1 className="hero__title">
               Kết nối toàn diện<br />
@@ -275,10 +292,10 @@ export default function HomePage() {
             <p className="section-desc">Hàng nghìn gia sư đang chờ kết nối với bạn</p>
           </div>
           <div className="subjects-grid">
-            {subjects.map((sub) => (
+            {(subjectsList.length > 0 ? subjectsList : []).map((sub) => (
               <Link
                 key={sub.id}
-                to={`/tim-gia-su?subject=${sub.id}`}
+                to={`/tim-gia-su?subject=${sub.slug || sub.id}`}
                 className="subject-card"
                 style={{ '--subject-color': sub.color }}
               >
@@ -357,7 +374,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="tutors-grid">
-            {featuredTutors.slice(0, 4).map((tutor) => (
+            {featuredTutorsList.slice(0, 4).map((tutor) => (
               <TutorCard key={tutor.id} tutor={tutor} />
             ))}
           </div>

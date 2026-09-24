@@ -1,1 +1,7 @@
-/* Trống - Đã sử dụng index.css để style toàn bộ app */
+.page-loading {
+  display: grid;
+  min-height: 40vh;
+  place-items: center;
+  color: var(--gray-600);
+  font-weight: 600;
+}

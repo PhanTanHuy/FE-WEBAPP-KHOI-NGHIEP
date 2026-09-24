@@ -1,0 +1,271 @@
+.ride-hailing-container {
+  min-height: 100vh;
+  background-color: #f4f7fe;
+  font-family: 'Inter', sans-serif;
+}
+
+.rh-header {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.rh-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.mode-toggle {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.mode-toggle.active {
+  background: white;
+  color: #1e3c72;
+}
+
+.rh-main {
+  max-width: 1200px;
+  margin: -40px auto 0;
+  padding: 0 2rem 3rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.rh-booking-section, .rh-driver-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .rh-booking-section {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.rh-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.rh-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+  display: flex;
+  align-items: center;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49,130,206,0.1);
+}
+
+.btn-primary {
+  background: #3182ce;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #2b6cb0;
+}
+
+.btn-success {
+  background: #48bb78;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+}
+
+.btn-success:hover {
+  background: #38a169;
+}
+
+.rh-quote {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.quote-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f7fafc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.quote-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4a5568;
+}
+
+.quote-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.ride-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ride-list-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ride-list-item:last-child {
+  border-bottom: none;
+}
+
+.ride-list-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.status-badge.accepted {
+  background: #bee3f8;
+  color: #2b6cb0;
+}
+
+.ride-list-route p {
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.ride-list-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.status-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f0fff4;
+  border-radius: 8px;
+  border: 1px solid #c6f6d5;
+  margin-bottom: 1.5rem;
+}
+
+.toggle-switch {
+  width: 50px;
+  height: 26px;
+  background: #48bb78;
+  border-radius: 13px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.stat-box {
+  background: #f7fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-box h3 {
+  font-size: 0.875rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-box p {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}

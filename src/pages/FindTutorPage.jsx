@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X, ChevronDown, Star, MapPin } from 'lucide-react';
+import { Search, SlidersHorizontal, X, ChevronDown, Loader2 } from 'lucide-react';
 import TutorCard from '../components/ui/TutorCard';
-import { tutors } from '../data/tutors';
-import { subjects, levels, cities, priceRanges } from '../data/subjects';
+import { getTutors } from '../api/tutors';
+import { getSubjects, getLevels, getLocations } from '../api/subjects';
+import { priceRanges } from '../data/subjects';
+import { trackPage, trackTutorView, trackSearch } from '../api/analytics';
 import './FindTutorPage.css';
 
 const sortOptions = [
@@ -16,72 +18,139 @@ const sortOptions = [
 
 export default function FindTutorPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [tutorsList, setTutorsList] = useState([]);
+  const [subjectsList, setSubjectsList] = useState([]);
+  const [levelsList, setLevelsList] = useState([]);
+  const [locationsList, setLocationsList] = useState([]);
+  const [totalTutors, setTotalTutors] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [filters, setFilters] = useState({
     subject: searchParams.get('subject') || '',
-    level: '',
-    city: '',
-    priceRange: '',
+    level: searchParams.get('level') || '',
+    city: searchParams.get('city') || '',
+    priceRange: searchParams.get('priceRange') || '',
     mode: searchParams.get('mode') || '',
-    verified: false,
+    verified: searchParams.get('verified') === 'true',
   });
-  const [sortBy, setSortBy] = useState('rating');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'rating');
   const [showFilters, setShowFilters] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1', 10));
   const itemsPerPage = 6;
 
-  // Filter logic
-  const filteredTutors = tutors.filter((tutor) => {
-    const q = searchQuery.toLowerCase();
-    const matchQuery = !q || 
-      tutor.name.toLowerCase().includes(q) ||
-      tutor.subjects.some(s => s.toLowerCase().includes(q)) ||
-      tutor.location.toLowerCase().includes(q);
+  // Track page view on mount
+  useEffect(() => { trackPage('/tim-gia-su'); }, []);
 
-    const matchSubject = !filters.subject ||
-      tutor.subjects.some(s => s.toLowerCase().includes(
-        subjects.find(sub => sub.id === filters.subject)?.name.toLowerCase() || ''
-      ));
-
-    const matchLevel = !filters.level ||
-      tutor.levels.some(l => l.toLowerCase().includes(
-        levels.find(lv => lv.id === filters.level)?.name.toLowerCase() || ''
-      ));
-
-    const matchCity = !filters.city ||
-      tutor.city?.toLowerCase().includes(
-        cities.find(c => c.id === filters.city)?.name.toLowerCase() || ''
-      );
-
-    const priceRange = priceRanges.find(p => p.id === filters.priceRange);
-    const matchPrice = !filters.priceRange ||
-      (tutor.pricePerHour >= priceRange.min && tutor.pricePerHour <= priceRange.max);
-
-    const matchMode = !filters.mode ||
-      tutor.teachingMode.includes(filters.mode);
-
-    const matchVerified = !filters.verified || tutor.verified;
-
-    return matchQuery && matchSubject && matchLevel && matchCity && matchPrice && matchMode && matchVerified;
-  });
-
-  // Sort
-  const sortedTutors = [...filteredTutors].sort((a, b) => {
-    switch (sortBy) {
-      case 'rating': return b.rating - a.rating;
-      case 'price-asc': return a.pricePerHour - b.pricePerHour;
-      case 'price-desc': return b.pricePerHour - a.pricePerHour;
-      case 'experience': return b.experience - a.experience;
-      case 'reviews': return b.reviewCount - a.reviewCount;
-      default: return 0;
+  // 1. Load catalogs on mount
+  useEffect(() => {
+    async function loadCatalogs() {
+      try {
+        const [subjectsData, levelsData, locationsData] = await Promise.all([
+          getSubjects(),
+          getLevels(),
+          getLocations()
+        ]);
+        setSubjectsList(subjectsData || []);
+        setLevelsList(levelsData || []);
+        
+        const uniqueCities = Array.from(new Set((locationsData || []).map(l => l.city))).map(city => ({
+          id: city.toLowerCase().replace(/\s+/g, '-'),
+          name: city
+        }));
+        setLocationsList(uniqueCities);
+      } catch (err) {
+        console.error('Error fetching catalogs:', err);
+      }
     }
-  });
+    loadCatalogs();
+  }, []);
 
-  const totalPages = Math.ceil(sortedTutors.length / itemsPerPage);
-  const paginatedTutors = sortedTutors.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // 2. Fetch tutors with server-side query and pagination
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function fetchServerTutors() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        let min_price = undefined;
+        let max_price = undefined;
+        if (filters.priceRange) {
+          const pr = priceRanges.find(p => p.id === filters.priceRange);
+          if (pr) {
+            min_price = pr.min;
+            max_price = pr.max === Infinity ? undefined : pr.max;
+          }
+        }
+
+        // Map sort
+        let sortParam = 'rating_desc';
+        if (sortBy === 'price-asc') sortParam = 'price_asc';
+        else if (sortBy === 'price-desc') sortParam = 'price_desc';
+        else if (sortBy === 'experience') sortParam = 'experience_desc';
+        else if (sortBy === 'reviews') sortParam = 'reviews_desc';
+
+        const data = await getTutors({
+          q: searchQuery || undefined,
+          subject: filters.subject || undefined,
+          level: filters.level || undefined,
+          city: filters.city || undefined,
+          mode: filters.mode || undefined,
+          min_price,
+          max_price,
+          verified: filters.verified ? true : undefined,
+          sort: sortParam,
+          page: currentPage,
+          per_page: itemsPerPage,
+          paginate: true
+        });
+
+        if (!isCancelled) {
+          if (data && data.items) {
+            setTutorsList(data.items);
+            setTotalTutors(data.total);
+            setTotalPages(data.total_pages);
+          } else if (Array.isArray(data)) {
+            setTutorsList(data);
+            setTotalTutors(data.length);
+            setTotalPages(Math.ceil(data.length / itemsPerPage) || 1);
+          }
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          console.error('Error fetching tutors from server:', err);
+          setError('Không thể tải danh sách gia sư từ máy chủ. Vui lòng thử lại sau.');
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchServerTutors();
+
+    // Sync with URL params
+    const newParams = {};
+    if (searchQuery) newParams.q = searchQuery;
+    if (filters.subject) newParams.subject = filters.subject;
+    if (filters.level) newParams.level = filters.level;
+    if (filters.city) newParams.city = filters.city;
+    if (filters.priceRange) newParams.priceRange = filters.priceRange;
+    if (filters.mode) newParams.mode = filters.mode;
+    if (filters.verified) newParams.verified = 'true';
+    if (sortBy && sortBy !== 'rating') newParams.sort = sortBy;
+    if (currentPage > 1) newParams.page = currentPage.toString();
+    setSearchParams(newParams, { replace: true });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [searchQuery, filters, sortBy, currentPage]);
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: prev[key] === value ? '' : value }));
@@ -92,7 +161,20 @@ export default function FindTutorPage() {
     setFilters({ subject: '', level: '', city: '', priceRange: '', mode: '', verified: false });
     setSearchQuery('');
     setCurrentPage(1);
+    setSortBy('rating');
   };
+
+  // Track search whenever searchQuery or filters change (debounced by effect deps)
+  useEffect(() => {
+    if (searchQuery || filters.subject) {
+      trackSearch(searchQuery, {
+        subject: filters.subject || undefined,
+        level:   filters.level   || undefined,
+        city:    filters.city    || undefined,
+        mode:    filters.mode    || undefined,
+      });
+    }
+  }, [searchQuery, filters.subject, filters.level]);
 
   const activeFilterCount = Object.values(filters).filter(v => v && v !== false).length + (searchQuery ? 1 : 0);
 
@@ -148,12 +230,12 @@ export default function FindTutorPage() {
           {/* Môn học */}
           <FilterSection title="Môn học">
             <div className="filter-chips">
-              {subjects.map((sub) => (
+              {subjectsList.map((sub) => (
                 <button
                   key={sub.id}
-                  className={`filter-chip ${filters.subject === sub.id ? 'active' : ''}`}
-                  onClick={() => handleFilterChange('subject', sub.id)}
-                  id={`filter-subject-${sub.id}`}
+                  className={`filter-chip ${filters.subject === sub.slug ? 'active' : ''}`}
+                  onClick={() => handleFilterChange('subject', sub.slug)}
+                  id={`filter-subject-${sub.slug}`}
                 >
                   <span>{sub.icon}</span> {sub.name}
                 </button>
@@ -164,14 +246,14 @@ export default function FindTutorPage() {
           {/* Cấp học */}
           <FilterSection title="Cấp học">
             <div className="filter-list">
-              {levels.map((lv) => (
+              {levelsList.map((lv) => (
                 <label key={lv.id} className="filter-radio">
                   <input
                     type="radio"
                     name="level"
-                    checked={filters.level === lv.id}
-                    onChange={() => handleFilterChange('level', lv.id)}
-                    id={`filter-level-${lv.id}`}
+                    checked={filters.level === lv.slug}
+                    onChange={() => handleFilterChange('level', lv.slug)}
+                    id={`filter-level-${lv.slug}`}
                   />
                   <div className="radio-custom" />
                   <span>{lv.name}</span>
@@ -184,7 +266,7 @@ export default function FindTutorPage() {
           {/* Thành phố */}
           <FilterSection title="Khu vực">
             <div className="filter-list">
-              {cities.map((city) => (
+              {locationsList.map((city) => (
                 <label key={city.id} className="filter-radio">
                   <input
                     type="radio"
@@ -257,7 +339,7 @@ export default function FindTutorPage() {
           {/* Toolbar */}
           <div className="find-toolbar">
             <div className="find-results-count">
-              Tìm thấy <strong>{filteredTutors.length}</strong> gia sư
+              Tìm thấy <strong>{totalTutors}</strong> gia sư
               {searchQuery && <span className="search-term"> cho "{searchQuery}"</span>}
             </div>
             <div className="find-sort">
@@ -265,7 +347,10 @@ export default function FindTutorPage() {
               <div className="sort-select-wrap">
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="form-select"
                   id="sort-select"
                 >
@@ -277,12 +362,24 @@ export default function FindTutorPage() {
             </div>
           </div>
 
-          {/* Results */}
-          {paginatedTutors.length > 0 ? (
+          {/* Loading / Error / Results */}
+          {loading ? (
+            <div className="empty-state" style={{ padding: '60px 0' }}>
+              <Loader2 size={36} className="animate-spin" style={{ margin: '0 auto 16px', color: '#3B82F6' }} />
+              <div className="empty-state-title">Đang tải danh sách gia sư...</div>
+            </div>
+          ) : error ? (
+            <div className="empty-state">
+              <div className="empty-state-icon">⚠️</div>
+              <div className="empty-state-title">{error}</div>
+            </div>
+          ) : tutorsList.length > 0 ? (
             <>
               <div className="find-grid">
-                {paginatedTutors.map((tutor) => (
-                  <TutorCard key={tutor.id} tutor={tutor} />
+                {tutorsList.map((tutor) => (
+                  <div key={tutor.id} onClick={() => trackTutorView(tutor, { subject: filters.subject })}>
+                    <TutorCard tutor={tutor} />
+                  </div>
                 ))}
               </div>
 
