@@ -1,0 +1,1117 @@
+/* =========================================================
+   MAIN
+========================================================= */
+
+.tutor-register-page {
+    min-height: calc(100vh - 80px);
+    background:
+        radial-gradient(circle at 10% 10%,
+            rgba(43, 153, 255, 0.08),
+            transparent 30%),
+        #f7fbff;
+    padding: 28px 20px 60px;
+    color: #173b67;
+}
+
+.tutor-register-container {
+    width: min(1280px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 285px minmax(0, 1fr);
+    min-height: 760px;
+    background: #ffffff;
+    border: 1px solid #dcecf9;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 35px rgba(37, 117, 180, 0.08);
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.tutor-register-sidebar {
+    background:
+        linear-gradient(180deg,
+            #f4fbff 0%,
+            #edf8ff 75%,
+            #e5f5ff 100%);
+    border-right: 1px solid #dbeaf6;
+    padding: 28px 18px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-sidebar-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #17497d;
+    margin: 0 10px 28px;
+}
+
+.register-steps {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-step {
+    display: flex;
+    position: relative;
+    min-height: 82px;
+    gap: 13px;
+}
+
+.register-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 34px;
+    width: 2px;
+    height: 50px;
+    background: #d5e5f2;
+}
+
+.register-step.active:not(:last-child)::after,
+.register-step.completed:not(:last-child)::after {
+    background: #49a7eb;
+}
+
+.register-step-number {
+    flex-shrink: 0;
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
+    background: #e4f0fa;
+    color: #527492;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+}
+
+.register-step.active .register-step-number {
+    background: #168ee6;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(22, 142, 230, 0.25);
+}
+
+.register-step.completed .register-step-number {
+    background: #20b981;
+    color: white;
+}
+
+.register-step-content {
+    padding-top: 2px;
+}
+
+.register-step-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #42627e;
+    margin-bottom: 5px;
+}
+
+.register-step.active .register-step-title {
+    color: #168ee6;
+}
+
+.register-step-description {
+    font-size: 10px;
+    line-height: 1.45;
+    color: #829bb1;
+    max-width: 170px;
+}
+
+.register-sidebar-note {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 10px;
+    background: rgba(25, 144, 230, 0.08);
+    display: flex;
+    gap: 10px;
+    color: #168ee6;
+}
+
+.register-sidebar-note strong {
+    display: block;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.register-sidebar-note p {
+    margin: 5px 0 0;
+    color: #67849e;
+    font-size: 9px;
+    line-height: 1.55;
+}
+
+.register-sidebar-illustration {
+    height: 180px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.illustration-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(80, 177, 239, 0.12);
+}
+
+.circle-1 {
+    width: 150px;
+    height: 150px;
+    right: -20px;
+    bottom: -40px;
+}
+
+.circle-2 {
+    width: 90px;
+    height: 90px;
+    left: -35px;
+    bottom: 5px;
+}
+
+.illustration-person {
+    position: absolute;
+    bottom: 10px;
+    left: 62px;
+    font-size: 82px;
+    z-index: 3;
+}
+
+.illustration-laptop {
+    position: absolute;
+    bottom: 10px;
+    left: 105px;
+    font-size: 55px;
+    z-index: 4;
+}
+
+.illustration-graduation {
+    position: absolute;
+    right: 40px;
+    top: 20px;
+    font-size: 35px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.tutor-register-content {
+    min-width: 0;
+    background: #ffffff;
+}
+
+.register-topbar {
+    min-height: 63px;
+    padding: 0 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    border-bottom: 1px solid #e7f0f7;
+}
+
+.register-top-step {
+    color: #168ee6;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.register-top-title {
+    color: #42627e;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.register-progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 48%;
+}
+
+.register-progress {
+    flex: 1;
+    height: 6px;
+    background: #e4edf5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.register-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg,
+            #168ee6,
+            #26a6ef);
+    transition: width 0.35s ease;
+}
+
+.register-progress-wrapper strong {
+    color: #3e6d93;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.register-step-page {
+    padding: 26px 28px;
+}
+
+.register-heading {
+    margin-bottom: 18px;
+}
+
+.register-heading h1 {
+    margin: 0 0 5px;
+    color: #163f70;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.register-heading p {
+    margin: 0;
+    color: #7190aa;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.register-form-card {
+    border: 1px solid #dcecf8;
+    border-radius: 7px;
+    padding: 18px;
+    background: #fff;
+}
+
+.register-basic-layout {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 25px;
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 12px;
+}
+
+.avatar-placeholder,
+.avatar-preview {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid #dceefb;
+}
+
+.avatar-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #94b9d7;
+    background: #f5fbff;
+}
+
+.avatar-preview {
+    object-fit: cover;
+}
+
+.avatar-camera {
+    position: absolute;
+    right: -4px;
+    bottom: 0;
+    width: 29px;
+    height: 29px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background: #168ee6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.upload-avatar-button {
+    height: 34px;
+    padding: 0 17px;
+    border: 1px solid #55aef0;
+    background: white;
+    color: #168ee6;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.upload-avatar-button:hover {
+    background: #f0f8ff;
+}
+
+.upload-hint {
+    text-align: center;
+    color: #94aabe;
+    font-size: 8px;
+    line-height: 1.5;
+    margin-top: 7px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.register-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+}
+
+.form-field {
+    min-width: 0;
+}
+
+.form-label {
+    display: block;
+    color: #375b7b;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.required-star {
+    color: #f05252;
+    margin-left: 3px;
+}
+
+.optional-text {
+    color: #9aafbf;
+    font-weight: 400;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    border: 1px solid #d5e6f3;
+    border-radius: 5px;
+    outline: none;
+    background: #ffffff;
+    color: #355b7e;
+    font-family: inherit;
+    font-size: 11px;
+    box-sizing: border-box;
+    transition: 0.2s ease;
+}
+
+.form-field input,
+.form-field select {
+    height: 37px;
+    padding: 0 11px;
+}
+
+.form-field textarea {
+    min-height: 100px;
+    resize: vertical;
+    padding: 10px;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+    color: #b5c7d6;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    border-color: #5eb3ef;
+    box-shadow: 0 0 0 3px rgba(31, 148, 231, 0.08);
+}
+
+.input-icon-wrapper {
+    position: relative;
+}
+
+.input-icon-wrapper input {
+    padding-right: 36px;
+}
+
+.input-icon-wrapper svg {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #80a4bf;
+    pointer-events: none;
+}
+
+.textarea-wrapper {
+    position: relative;
+}
+
+.textarea-wrapper span {
+    position: absolute;
+    bottom: 7px;
+    right: 8px;
+    font-size: 9px;
+    color: #9aafbf;
+}
+
+
+/* =========================================================
+   STEP 2
+========================================================= */
+
+.education-upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #e6eff6;
+    margin-bottom: 22px;
+}
+
+.form-label span {
+    color: #91a8ba;
+    font-weight: 400;
+}
+
+.certificate-upload {
+    width: 100%;
+    height: 150px;
+    border: 1.5px dashed #a8cde8;
+    border-radius: 8px;
+    background: #fafdff;
+    color: #77a2c0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.certificate-upload:hover {
+    background: #f3faff;
+    border-color: #4ba7e9;
+}
+
+.certificate-upload strong {
+    color: #547994;
+    font-size: 11px;
+}
+
+.certificate-upload span {
+    color: #9bb1c2;
+    font-size: 9px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.certificate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    padding-top: 5px;
+}
+
+.checkbox-row,
+.checkbox-subject {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #57748d;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.checkbox-row input,
+.checkbox-subject input {
+    display: none;
+}
+
+.custom-checkbox {
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #c5d9e8;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.checkbox-row input:checked+.custom-checkbox,
+.checkbox-subject input:checked+.custom-checkbox {
+    background: #168ee6;
+    border-color: #168ee6;
+}
+
+.education-grid {
+    margin-top: 5px;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select {
+    appearance: none;
+    padding-right: 35px;
+    cursor: pointer;
+}
+
+.select-wrapper svg {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6e92ad;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   STEP 3
+========================================================= */
+
+.setting-section {
+    padding: 2px 0 22px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #e6eff6;
+}
+
+.setting-section:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.subject-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 17px 22px;
+}
+
+.info-icon {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #7e9eb7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 9px;
+    margin-left: 5px;
+}
+
+.grade-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.grade-chip {
+    padding: 9px 18px;
+    border: 1px solid #d5e6f1;
+    background: #f7fbfe;
+    border-radius: 30px;
+    color: #5d7b94;
+    font-size: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.grade-chip:hover {
+    border-color: #6ab5ea;
+    color: #168ee6;
+}
+
+.grade-chip.selected {
+    background: #e5f4ff;
+    border-color: #54abe9;
+    color: #168ee6;
+    font-weight: 700;
+}
+
+.district-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.price-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-header strong {
+    color: #168ee6;
+    font-size: 12px;
+}
+
+.price-slider {
+    position: relative;
+    height: 35px;
+    margin-top: 5px;
+}
+
+.price-slider input {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    left: 0;
+    top: 14px;
+    pointer-events: none;
+    appearance: none;
+    background: transparent;
+}
+
+.price-slider input::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #56aee9;
+    border-radius: 20px;
+}
+
+.price-slider input::-webkit-slider-thumb {
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #168ee6;
+    border: 3px solid #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    margin-top: -6px;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.price-labels {
+    display: flex;
+    justify-content: space-between;
+    color: #7f9bb1;
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-card {
+    border: 1px solid #dcecf8;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.review-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #168ee6;
+    margin-bottom: 17px;
+}
+
+.review-section-header h3 {
+    margin: 0;
+    color: #315a7c;
+    font-size: 14px;
+}
+
+.review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+}
+
+.review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.review-item span,
+.review-item-full>span {
+    color: #8aa1b3;
+    font-size: 10px;
+}
+
+.review-item strong {
+    color: #416582;
+    font-size: 11px;
+}
+
+.review-divider {
+    height: 1px;
+    background: #e7f0f6;
+    margin: 22px 0;
+}
+
+.review-item-full {
+    margin-bottom: 15px;
+}
+
+.review-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 7px;
+}
+
+.review-tags span {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #eaf6ff;
+    color: #168ee6;
+    font-size: 10px;
+}
+
+.review-tags em {
+    color: #9aaebb;
+    font-size: 10px;
+}
+
+.review-warning {
+    margin-top: 22px;
+    padding: 13px;
+    background: #f0faf7;
+    border: 1px solid #c9eee1;
+    border-radius: 7px;
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    color: #1da27d;
+}
+
+.review-warning p {
+    margin: 0;
+    color: #548576;
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.register-actions {
+    padding: 0 28px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.register-actions-right {
+    display: flex;
+    gap: 12px;
+}
+
+.register-button {
+    min-width: 140px;
+    height: 40px;
+    border-radius: 6px;
+    padding: 0 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.register-button.secondary,
+.register-button.draft {
+    background: #ffffff;
+    border: 1px solid #8ec9ef;
+    color: #168ee6;
+}
+
+.register-button.secondary:hover,
+.register-button.draft:hover {
+    background: #f2f9ff;
+}
+
+.register-button.primary {
+    background: linear-gradient(135deg,
+            #168ee6,
+            #0d7bd0);
+    border: 1px solid #168ee6;
+    color: #ffffff;
+    box-shadow: 0 5px 14px rgba(22, 142, 230, 0.18);
+}
+
+.register-button.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 17px rgba(22, 142, 230, 0.25);
+}
+
+.register-button.complete {
+    min-width: 155px;
+}
+
+
+/* =========================================================
+   COMPLETE
+========================================================= */
+
+.completed-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+}
+
+.completed-card {
+    width: min(650px, 100%);
+    min-height: 600px;
+    padding: 50px 30px 0;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at 10% 10%,
+            rgba(37, 162, 235, 0.08),
+            transparent 25%),
+        #ffffff;
+    border: 1px solid #dcecf8;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(41, 111, 165, 0.1);
+}
+
+.completed-icon {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    background: #20b98b;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(32, 185, 139, 0.25);
+}
+
+.completed-confetti {
+    color: #168ee6;
+    font-size: 25px;
+    letter-spacing: 15px;
+}
+
+.completed-card h1 {
+    color: #16477a;
+    font-size: 32px;
+    margin: 5px 0 10px;
+}
+
+.completed-card>p {
+    color: #7592aa;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.completed-home-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 180px;
+    height: 43px;
+    margin-top: 14px;
+    border-radius: 7px;
+    color: white;
+    background: #168ee6;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.completed-status-link {
+    display: block;
+    margin-top: 14px;
+    color: #168ee6;
+    text-decoration: none;
+    font-size: 11px;
+}
+
+.completed-illustration {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(180deg,
+            transparent,
+            #edf8ff);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 50px;
+    padding-bottom: 10px;
+    font-size: 100px;
+}
+
+.completed-illustration span {
+    font-size: 45px;
+    margin-bottom: 45px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+    .tutor-register-container {
+        grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .subject-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .register-basic-layout {
+        grid-template-columns: 120px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .tutor-register-page {
+        padding: 0;
+    }
+
+    .tutor-register-container {
+        display: block;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .tutor-register-sidebar {
+        display: none;
+    }
+
+    .register-topbar {
+        padding: 14px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .register-progress-wrapper {
+        width: 100%;
+    }
+
+    .register-step-page {
+        padding: 22px 16px;
+    }
+
+    .register-basic-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .avatar-section {
+        margin-bottom: 10px;
+    }
+
+    .form-grid,
+    .education-upload-grid,
+    .district-grid,
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .subject-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .register-actions {
+        padding: 0 16px 20px;
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .register-actions-right {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .register-button {
+        min-width: 0;
+    }
+
+    .register-button.secondary {
+        width: 100%;
+    }
+
+    .completed-card {
+        border-radius: 0;
+        min-height: calc(100vh - 80px);
+    }
+}
+
+@media (max-width: 450px) {
+    .subject-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .grade-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .grade-chip {
+        padding: 9px 8px;
+    }
+
+    .register-actions-right {
+        grid-template-columns: 1fr;
+    }
+
+    .register-heading h1 {
+        font-size: 22px;
+    }
+}

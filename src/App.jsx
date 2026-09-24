@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
-
+import DeliveryPage from './pages/DeliveryPage';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import FindTutorPage from './pages/FindTutorPage';
@@ -11,6 +11,11 @@ import BookingPage from './pages/BookingPage';
 import StudyMaterialsPage from './pages/StudyMaterialsPage';
 import ContactPage from './pages/ContactPage';
 import OnlineTutorPage from './pages/OnlineTutorPage';
+import HomeTutorPage from './pages/HomeTutorPage';
+import TrialPage from './pages/TrialPage';
+import TutorRegisterPage from './pages/TutorRegisterPage';
+import RegisterPage from './pages/RegisterPage';
+
 import './App.css';
 
 function App() {
@@ -62,7 +67,18 @@ function App() {
             path="/gia-su-online"
             element={<OnlineTutorPage />}
           />
-
+          <Route
+            path="/gia-su-tai-nha"
+            element={<HomeTutorPage />}
+          />
+          <Route
+            path="/dua-don-hoc-sinh"
+            element={<DeliveryPage />}
+          />
+          <Route
+            path="/hoc-thu"
+            element={<TrialPage />}
+          />
           {/* ================= ĐẶT LỊCH ================= */}
 
           <Route
@@ -92,7 +108,7 @@ function App() {
           <Route
             path="/dang-ky-gia-su"
             element={
-              <PagePlaceholder title="Đăng ký dạy" />
+              <TutorRegisterPage />
             }
           />
 
@@ -120,7 +136,7 @@ function App() {
           <Route
             path="/dang-ky"
             element={
-              <PagePlaceholder title="Đăng ký tài khoản" />
+              <RegisterPage />
             }
           />
 

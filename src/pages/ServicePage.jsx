@@ -53,7 +53,7 @@ const services = [
             'Phù hợp với học sinh cần kèm sát'
         ],
         button: 'Tìm gia sư tại nhà',
-        link: '/tim-gia-su?mode=home',
+        link: '/gia-su-tai-nha',
         color: 'green'
     },
 
@@ -73,7 +73,7 @@ const services = [
             'Tìm được gia sư phù hợp với nhu cầu'
         ],
         button: 'Đăng ký học thử',
-        link: '/dat-lich?trial=true',
+        link: '/hoc-thu',
         color: 'purple'
     },
 
