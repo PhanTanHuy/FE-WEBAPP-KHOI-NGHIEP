@@ -661,7 +661,7 @@ export default function TrialPage() {
 
 
                                     <Link
-                                        to={`/dat-lich?trial=true&tutor=${tutor.id}`}
+                                        to={`/dat-lich?trial=true&tutorId=${tutor.id}`}
                                         className="trial-book-button"
                                     >
                                         Đặt lịch học thử

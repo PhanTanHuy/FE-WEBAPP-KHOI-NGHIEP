@@ -14,7 +14,8 @@ const timeSlots = [
 export default function BookingPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const tutorId = searchParams.get('tutorId');
+  const tutorId = searchParams.get('tutorId') || searchParams.get('tutor');
+  const isTrial = searchParams.get('trial') === 'true';
 
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -24,7 +25,7 @@ export default function BookingPage() {
     date: '',
     timeSlot: '',
     mode: 'online',
-    note: '',
+    note: isTrial ? '[Học thử] ' : '',
     sessions: 1,
   });
   
@@ -73,7 +74,7 @@ export default function BookingPage() {
         date: form.date,
         start_time: `${start_time.trim()}:00`,
         end_time: `${end_time.trim()}:00`,
-        notes: `${form.note} | Cấp học: ${form.level} | Môn: ${form.subject} | Hình thức: ${form.mode}`
+        notes: `${form.note} | Cấp học: ${form.level} | Môn: ${form.subject} | Hình thức: ${form.mode}${isTrial ? ' | [Học thử]' : ''}`
       };
 
       await createBooking(payload);
@@ -91,7 +92,20 @@ export default function BookingPage() {
   }
 
   if (!tutor) {
-    return <div className="booking-page"><div className="container" style={{padding: '80px 0', textAlign: 'center'}}>Không tìm thấy gia sư!</div></div>;
+    return (
+      <div className="booking-page">
+        <div className="container" style={{padding: '80px 20px', textAlign: 'center', maxWidth: '600px', margin: '0 auto'}}>
+          <div style={{fontSize: '48px', marginBottom: '16px'}}>🔍</div>
+          <h2 style={{fontSize: '24px', fontWeight: '700', marginBottom: '12px', color: '#1E293B'}}>Chưa chọn gia sư</h2>
+          <p style={{color: '#64748B', marginBottom: '24px', lineHeight: '1.6'}}>
+            Vui lòng chọn một gia sư từ danh sách để tiến hành đặt lịch học hoặc học thử.
+          </p>
+          <Link to="/tim-gia-su" className="btn btn-primary btn-lg">
+            Tìm gia sư ngay →
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   const totalPrice = tutor.pricePerHour * 2 * form.sessions; // 2 hours per session
