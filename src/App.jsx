@@ -10,7 +10,7 @@ import ServicePage from './pages/ServicePage';
 import BookingPage from './pages/BookingPage';
 import StudyMaterialsPage from './pages/StudyMaterialsPage';
 import ContactPage from './pages/ContactPage';
-
+import OnlineTutorPage from './pages/OnlineTutorPage';
 import './App.css';
 
 function App() {
@@ -58,7 +58,10 @@ function App() {
             path="/dich-vu"
             element={<ServicePage />}
           />
-
+          <Route
+            path="/gia-su-online"
+            element={<OnlineTutorPage />}
+          />
 
           {/* ================= ĐẶT LỊCH ================= */}
 

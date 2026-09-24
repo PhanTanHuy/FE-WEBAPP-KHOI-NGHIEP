@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import {
     Video,
     Home,
@@ -9,6 +10,7 @@ import {
 } from 'lucide-react';
 
 import './ServicePage.css';
+
 
 const services = [
     {
@@ -26,8 +28,12 @@ const services = [
             'Linh hoạt lịch học, phù hợp nhiều đối tượng',
             'Đa dạng môn học và cấp học'
         ],
+
+        // QUAN TRỌNG:
+        // Trang con Gia sư online
         button: 'Tìm gia sư online',
-        link: '/tim-gia-su?mode=online',
+        link: '/gia-su-online',
+
         color: 'blue'
     },
 
@@ -92,15 +98,23 @@ const services = [
     }
 ];
 
+
 export default function ServicePage() {
+
     return (
         <main className="service-page">
 
-            {/* ================= HERO ================= */}
+
+            {/* =================================================
+                HERO
+            ================================================= */}
+
             <section className="service-hero">
 
                 <div className="service-hero-bg-circle service-hero-bg-circle-1" />
+
                 <div className="service-hero-bg-circle service-hero-bg-circle-2" />
+
 
                 <div className="service-container service-hero-content">
 
@@ -110,11 +124,13 @@ export default function ServicePage() {
                             DỊCH VỤ CỦA EDUCONNECT
                         </div>
 
+
                         <h1>
                             Đa dạng dịch vụ,
                             <br />
                             đáp ứng mọi nhu cầu học tập
                         </h1>
+
 
                         <p>
                             EduConnect mang đến hệ sinh thái hỗ trợ học tập toàn diện,
@@ -124,18 +140,23 @@ export default function ServicePage() {
 
                     </div>
 
+
                     <div className="service-hero-image">
 
                         <div className="hero-decoration graduation">
                             🎓
                         </div>
 
+
                         <div className="hero-person">
+
                             <img
                                 src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=700&q=85"
                                 alt="Học sinh EduConnect"
                             />
+
                         </div>
+
 
                         <div className="hero-message">
                             Học theo cách
@@ -148,10 +169,14 @@ export default function ServicePage() {
                     </div>
 
                 </div>
+
             </section>
 
 
-            {/* ================= SERVICES ================= */}
+            {/* =================================================
+                SERVICES
+            ================================================= */}
+
             <section className="service-list-section">
 
                 <div className="service-container">
@@ -168,7 +193,9 @@ export default function ServicePage() {
                                     className={`service-card service-card-${service.color}`}
                                 >
 
-                                    {/* Image */}
+
+                                    {/* IMAGE */}
+
                                     <div className="service-card-image">
 
                                         <img
@@ -176,47 +203,81 @@ export default function ServicePage() {
                                             alt={service.title}
                                         />
 
+
                                         <div className="service-card-icon">
-                                            <Icon size={25} strokeWidth={2.5} />
+
+                                            <Icon
+                                                size={25}
+                                                strokeWidth={2.5}
+                                            />
+
                                         </div>
 
                                     </div>
 
 
-                                    {/* Content */}
+                                    {/* CONTENT */}
+
                                     <div className="service-card-content">
 
-                                        <h2>{service.title}</h2>
+                                        <h2>
+                                            {service.title}
+                                        </h2>
 
-                                        <h3>{service.subtitle}</h3>
+
+                                        <h3>
+                                            {service.subtitle}
+                                        </h3>
+
 
                                         <p className="service-card-description">
                                             {service.description}
                                         </p>
 
+
                                         <ul className="service-feature-list">
 
-                                            {service.features.map((feature) => (
-                                                <li key={feature}>
+                                            {service.features.map(
+                                                (feature) => (
 
-                                                    <span className="service-check">
-                                                        <CheckCircle size={17} />
-                                                    </span>
+                                                    <li key={feature}>
 
-                                                    <span>{feature}</span>
+                                                        <span className="service-check">
 
-                                                </li>
-                                            ))}
+                                                            <CheckCircle
+                                                                size={17}
+                                                            />
+
+                                                        </span>
+
+                                                        <span>
+                                                            {feature}
+                                                        </span>
+
+                                                    </li>
+
+                                                )
+                                            )}
 
                                         </ul>
 
+
+                                        {/* =========================
+                                            BUTTON
+                                        ========================= */}
 
                                         <Link
                                             to={service.link}
                                             className="service-card-button"
                                         >
-                                            <span>{service.button}</span>
-                                            <ArrowRight size={18} />
+
+                                            <span>
+                                                {service.button}
+                                            </span>
+
+                                            <ArrowRight
+                                                size={18}
+                                            />
 
                                         </Link>
 
@@ -224,6 +285,7 @@ export default function ServicePage() {
 
                                 </article>
                             );
+
                         })}
 
                     </div>
@@ -233,7 +295,10 @@ export default function ServicePage() {
             </section>
 
 
-            {/* ================= BOTTOM CTA ================= */}
+            {/* =================================================
+                BOTTOM CTA
+            ================================================= */}
+
             <section className="service-bottom">
 
                 <div className="service-container service-bottom-inner">
@@ -244,20 +309,28 @@ export default function ServicePage() {
                             Chưa biết dịch vụ nào phù hợp?
                         </h2>
 
+
                         <p>
                             Đội ngũ EduConnect luôn sẵn sàng tư vấn
                             và giúp bạn lựa chọn giải pháp học tập tốt nhất.
                         </p>
 
+
                         <Link
                             to="/danh-gia"
                             className="service-consult-button"
                         >
+
                             Nhận tư vấn ngay
-                            <ArrowRight size={17} />
+
+                            <ArrowRight
+                                size={17}
+                            />
+
                         </Link>
 
                     </div>
+
 
                     <div className="service-bottom-image">
 
