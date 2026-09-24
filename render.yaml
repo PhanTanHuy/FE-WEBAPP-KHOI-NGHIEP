@@ -2,7 +2,8 @@ services:
   - type: web
     name: educonnect-backend
     env: python
-    buildCommand: "cd backend && pip install -r requirements.txt && alembic upgrade head"
+    branch: backend
+    buildCommand: "cd backend && pip install -r requirements.txt && alembic upgrade head && python -m seeds.seed"
     startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: DATABASE_URL
@@ -15,8 +16,13 @@ services:
   - type: web
     name: educonnect-frontend
     env: static
+    branch: backend
     buildCommand: "npm install && npm run build"
     staticPublishPath: "./dist"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_URL
         value: "https://educonnect-backend.onrender.com"
@@ -26,3 +32,4 @@ databases:
     plan: free
     databaseName: educonnect
     user: admin
+
