@@ -149,18 +149,4 @@ Dashboard bao gồm: KPIs, biểu đồ theo ngày, top gia sư/tài liệu, fun
 
 ---
 
-## 🚢 Deploy
-
-Dự án có sẵn cấu hình deploy lên **Render.com** qua file `render.yaml`.
-
-```bash
-# Build frontend
-npm run build
-
-# Backend chạy bằng
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
-```
-
----
-
 *EduConnect — Kết nối tri thức, ươm mầm tương lai 🌱*
