@@ -3,13 +3,12 @@ services:
     name: educonnect-backend
     env: python
     branch: backend
+    plan: free
     buildCommand: "cd backend && pip install -r requirements.txt && alembic upgrade head && python -m seeds.seed"
     startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: educonnect-db
-          property: connectionString
+        sync: false
       - key: SECRET_KEY
         generateValue: true
 
@@ -26,10 +25,4 @@ services:
     envVars:
       - key: VITE_API_URL
         value: "https://educonnect-backend.onrender.com"
-
-databases:
-  - name: educonnect-db
-    plan: free
-    databaseName: educonnect
-    user: admin
 
