@@ -41,9 +41,13 @@ export default function ContactPage() {
                             </div>
                         </div>
 
-                        <div className="map-container">
-                            <img src="https://via.placeholder.com/600x300?text=B%E1%BA%A3n+%C4%91%E1%BB%93+EduConnect" alt="Map Placeholder" />
-                        </div>
+                        {/* <div className="map-container">
+                            <iframe
+                                title="Bản đồ EduConnect"
+                                src="https://www.openstreetmap.org/export/embed.html?bbox=106.6700%2C10.7700%2C106.6900%2C10.7850&layer=mapnik"
+                                loading="lazy"
+                            />
+                        </div> */}
                     </div>
 
                     <div className="contact-form-container">
