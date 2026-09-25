@@ -7,10 +7,20 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.database import SessionLocal
 from app.models.models import User
-from app.schemas.user import TokenData
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login", auto_error=False)
+
+def _user_from_token(db: Session, token: str) -> Optional[User]:
+    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+    subject = payload.get("sub")
+    if subject is None:
+        return None
+    try:
+        return db.query(User).filter(User.id == int(subject)).first()
+    except (TypeError, ValueError):
+        # Backward compatibility for tokens issued before user IDs were used.
+        return db.query(User).filter(User.email == str(subject).lower()).first()
 
 def get_db() -> Generator:
     try:
@@ -23,11 +33,7 @@ def get_optional_current_user(db: Session = Depends(get_db), token: Optional[str
     if not token:
         return None
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            return None
-        return db.query(User).filter(User.email == email).first()
+        return _user_from_token(db, token)
     except JWTError:
         return None
 
@@ -38,15 +44,9 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise credentials_exception
-        token_data = TokenData(email=email)
+        user = _user_from_token(db, token)
     except JWTError:
         raise credentials_exception
-    
-    user = db.query(User).filter(User.email == token_data.email).first()
     if user is None:
         raise credentials_exception
     return user

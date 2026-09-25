@@ -304,22 +304,30 @@ export default function Header() {
           {/* ================= MOBILE ACTIONS ================= */}
 
           <div className="mobile-nav-actions">
-
-            <Link
-              to="/dang-nhap"
-              className="btn btn-outline btn-full"
-              onClick={closeMobileMenu}
-            >
-              Đăng nhập
-            </Link>
-
-            <Link
-              to="/dang-ky"
-              className="btn btn-primary btn-full"
-              onClick={closeMobileMenu}
-            >
-              Đăng ký ngay
-            </Link>
+            {isLoggedIn ? (
+              <>
+                <Link to="/quan-ly-dat-lich" className="btn btn-outline btn-full" onClick={closeMobileMenu}>
+                  Quản lý lịch học
+                </Link>
+                {user?.role === 'admin' && (
+                  <Link to="/admin" className="btn btn-outline btn-full" onClick={closeMobileMenu}>
+                    Quản trị hệ thống
+                  </Link>
+                )}
+                <button className="btn btn-primary btn-full" onClick={() => { logout(); closeMobileMenu(); navigate('/'); }}>
+                  Đăng xuất
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/dang-nhap" className="btn btn-outline btn-full" onClick={closeMobileMenu}>
+                  Đăng nhập
+                </Link>
+                <Link to="/dang-ky" className="btn btn-primary btn-full" onClick={closeMobileMenu}>
+                  Đăng ký ngay
+                </Link>
+              </>
+            )}
 
           </div>
 

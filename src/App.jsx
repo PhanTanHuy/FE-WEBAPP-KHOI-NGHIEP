@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 import './App.css';
 
@@ -95,11 +96,11 @@ function App() {
 
           <Route
             path="/dat-lich"
-            element={<BookingPage />}
+            element={<ProtectedRoute><BookingPage /></ProtectedRoute>}
           />
           <Route
             path="/quan-ly-dat-lich"
-            element={<BookingsDashboardPage />}
+            element={<ProtectedRoute><BookingsDashboardPage /></ProtectedRoute>}
           />
 
 
@@ -131,14 +132,14 @@ function App() {
           <Route
             path="/tien-do"
             element={
-              <ProgressPage />
+              <ProtectedRoute><ProgressPage /></ProtectedRoute>
             }
           />
 
           <Route
             path="/danh-gia"
             element={
-              <ReviewPage />
+              <ProtectedRoute><ReviewPage /></ProtectedRoute>
             }
           />
 
@@ -159,11 +160,11 @@ function App() {
           <Route
             path="/admin/duyet-gia-su"
             element={
-              <AdminTutorApplicationsPage />
+              <ProtectedRoute roles={['admin']}><AdminTutorApplicationsPage /></ProtectedRoute>
             }
           />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+          <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/analytics" element={<ProtectedRoute roles={['admin']}><AnalyticsDashboard /></ProtectedRoute>} />
 
 
           {/* ================= 404 ================= */}

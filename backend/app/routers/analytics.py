@@ -81,7 +81,12 @@ def track_event(
         if token:
             payload_jwt = decode_access_token(token)
             if payload_jwt:
-                user_id = payload_jwt.get("sub")
+                subject = payload_jwt.get("sub")
+                try:
+                    user_id = int(subject)
+                except (TypeError, ValueError):
+                    legacy_user = db.query(User).filter(func.lower(User.email) == str(subject).lower()).first()
+                    user_id = legacy_user.id if legacy_user else None
     except Exception:
         pass
 
