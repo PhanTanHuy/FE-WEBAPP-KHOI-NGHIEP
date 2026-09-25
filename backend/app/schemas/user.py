@@ -31,7 +31,7 @@ class UserBase(BaseModel):
         return normalized
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=8, max_length=72)
+    password: str = Field(min_length=6, max_length=72)
 
     model_config = ConfigDict(extra="forbid")
 
@@ -40,8 +40,6 @@ class UserCreate(UserBase):
     def validate_password(cls, value: str) -> str:
         if len(value.encode("utf-8")) > 72:
             raise ValueError("Mật khẩu không được dài quá 72 byte")
-        if not re.search(r"[A-Za-z]", value) or not re.search(r"\d", value):
-            raise ValueError("Mật khẩu phải có cả chữ và số")
         return value
 
 class UserResponse(UserBase):
