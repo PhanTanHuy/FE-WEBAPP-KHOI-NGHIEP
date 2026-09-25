@@ -41,13 +41,17 @@ export default function ContactPage() {
                             </div>
                         </div>
 
-                        <div className="map-container">
-                            <img src="https://via.placeholder.com/600x300?text=B%E1%BA%A3n+%C4%91%E1%BB%93+EduConnect" alt="Map Placeholder" />
-                        </div>
+                        {/* <div className="map-container">
+                            <iframe
+                                title="Bản đồ EduConnect"
+                                src="https://www.openstreetmap.org/export/embed.html?bbox=106.6700%2C10.7700%2C106.6900%2C10.7850&layer=mapnik"
+                                loading="lazy"
+                            />
+                        </div> */}
                     </div>
 
                     <div className="contact-form-container">
-                        <h2>Gửi tin nhắn</h2>
+                        {/* <h2>Gửi tin nhắn</h2>
                         <form className="contact-form">
                             <div className="form-group">
                                 <label>Họ và tên</label>
@@ -64,11 +68,11 @@ export default function ContactPage() {
                             <div className="form-group">
                                 <label>Nội dung tin nhắn</label>
                                 <textarea rows="5" placeholder="Bạn cần chúng tôi hỗ trợ vấn đề gì?" required></textarea>
-                            </div>
-                            <button type="submit" className="submit-btn">
-                                <Send size={18} /> Gửi tin nhắn
+                            </div> */}
+                            <button type="submit" className="submit-btn" onClick={() => window.open("https://docs.google.com/forms/d/e/1FAIpQLSfhS7DBeZu4ccJkbPlKJ38FXRLU5oTYAAkR56dEGK3CzxHTuA/viewform?usp=publish_to_web", "_blank")}>
+                                <Send size={18} /> Góp ý
                             </button>
-                        </form>
+                        {/* </form> */}
                     </div>
                 </div>
             </section>
