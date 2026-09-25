@@ -12,7 +12,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: CORS_ORIGINS
-        value: '["https://educonnect-frontend.onrender.com"]'
+        value: '["https://educonnect-frontend-ejyy.onrender.com"]'
 
   - type: web
     name: educonnect-frontend
@@ -26,6 +26,6 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: "https://educonnect-backend-p3mf.onrender.com"
+        value: "https://be-educonnect-tipp.onrender.com"
 
 
