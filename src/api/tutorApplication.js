@@ -36,7 +36,8 @@ export async function uploadTutorFile(file, type = 'avatar') {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch('/api/v1/uploads', {
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://educonnect-backend-p3mf.onrender.com';
+  const response = await fetch(`${API_BASE}/api/v1/uploads`, {
     method: 'POST',
     headers,
     body: formData,

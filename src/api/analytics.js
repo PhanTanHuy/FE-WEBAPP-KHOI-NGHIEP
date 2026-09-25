@@ -18,7 +18,7 @@
  *   track('view_page', { entity_name: '/tim-gia-su' });
  */
 
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://educonnect-backend-p3mf.onrender.com';
 
 // ── Session ID ────────────────────────────────────────────────────────────────
 // Một UUID ngẫu nhiên, lưu vào localStorage để nhận diện 1 lượt ghé thăm.

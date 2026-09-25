@@ -1,5 +1,5 @@
 const API_PREFIX = '/api/v1';
-const BASE_URL = import.meta.env.VITE_API_URL || '';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://educonnect-backend-p3mf.onrender.com';
 
 export async function apiClient(endpoint, options = {}) {
   const cleanEndpoint = endpoint.startsWith('/api')

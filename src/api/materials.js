@@ -49,7 +49,8 @@ export async function uploadMaterialFile(file) {
   formData.append('file', file);
 
   const token = localStorage.getItem('token');
-  const res = await fetch('http://127.0.0.1:8000/api/v1/materials/upload-file', {
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://educonnect-backend-p3mf.onrender.com';
+  const res = await fetch(`${API_BASE}/api/v1/materials/upload-file`, {
     method: 'POST',
     headers: token ? { 'Authorization': `Bearer ${token}` } : {},
     body: formData,
