@@ -24,6 +24,6 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: "https://educonnect-backend.onrender.com"
+        value: "https://educonnect-backend-p3mf.onrender.com"
 
 
