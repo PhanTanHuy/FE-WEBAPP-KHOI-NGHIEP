@@ -12,7 +12,10 @@ from slowapi.errors import RateLimitExceeded
 # Configure loguru
 logger.remove()
 logger.add(sys.stdout, format="{time} {level} {message}", level="INFO")
-logger.add("logs/app.log", rotation="50 MB", level="DEBUG")
+try:
+    logger.add("logs/app.log", rotation="50 MB", level="DEBUG")
+except OSError:
+    logger.warning("File logging is unavailable; continuing with console logging.")
 
 from app.config import settings
 from app.routers import (

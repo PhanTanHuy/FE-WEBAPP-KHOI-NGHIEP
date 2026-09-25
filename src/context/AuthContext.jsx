@@ -1,86 +1,84 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { apiClient } from '../api/client';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { apiClient, clearAuthToken, getAuthToken } from '../api/client';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchCurrentUser();
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  const [loading, setLoading] = useState(() => Boolean(getAuthToken()));
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await apiClient('/auth/me');
-      setUser(response);
-    } catch (error) {
-      console.error('Failed to fetch user', error);
-      localStorage.removeItem('token');
+      const currentUser = await apiClient('/auth/me');
+      setUser(currentUser);
+      return currentUser;
+    } catch {
+      clearAuthToken();
+      setUser(null);
+      return null;
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (email, password) => {
+  useEffect(() => {
+    if (getAuthToken()) fetchCurrentUser();
+
+    const handleUnauthorized = () => setUser(null);
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, []);
+
+  const login = async (email, password, remember = true) => {
     try {
       const formData = new URLSearchParams();
-      formData.append('username', email);
+      formData.append('username', email.trim().toLowerCase());
       formData.append('password', password);
-
       const response = await apiClient('/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData,
       });
-
-      const { access_token } = response;
-      localStorage.setItem('token', access_token);
-      
-      await fetchCurrentUser();
-      return { success: true };
+      clearAuthToken();
+      (remember ? localStorage : sessionStorage).setItem('token', response.access_token);
+      const currentUser = await apiClient('/auth/me');
+      setUser(currentUser);
+      return { success: true, user: currentUser };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.message || 'Đăng nhập thất bại' 
-      };
+      clearAuthToken();
+      setUser(null);
+      return { success: false, message: error.message || 'Đăng nhập thất bại.' };
     }
   };
 
   const register = async (userData) => {
     try {
-      await apiClient('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(userData),
-      });
-      // Auto login after register
-      return await login(userData.email, userData.password);
-    } catch (error) {
-      return { 
-        success: false, 
-        message: error.message || 'Đăng ký thất bại' 
+      const payload = {
+        ...userData,
+        email: userData.email.trim().toLowerCase(),
+        full_name: userData.full_name.trim().replace(/\s+/g, ' '),
       };
+      await apiClient('/auth/register', { method: 'POST', body: JSON.stringify(payload) });
+      return await login(payload.email, payload.password, true);
+    } catch (error) {
+      return { success: false, message: error.message || 'Đăng ký thất bại.' };
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    clearAuthToken();
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser: fetchCurrentUser }}>
+      {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error('useAuth phải được dùng bên trong AuthProvider.');
+  return context;
+};

@@ -134,7 +134,7 @@ export function trackBooking(tutorId, tutorName, meta = {}) {
 
 // ── Analytics API (admin) ────────────────────────────────────────────────────
 const authHeader = () => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 

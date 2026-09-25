@@ -174,7 +174,7 @@ export default function ReviewPage() {
                         <p style={{ color: '#64748b', margin: '16px 0 24px' }}>
                             Bạn cần đăng nhập tài khoản học viên để thực hiện đánh giá gia sư.
                         </p>
-                        <Link to="/login" className="btn btn-primary">Đăng nhập ngay</Link>
+                        <Link to="/dang-nhap" className="btn btn-primary">Đăng nhập ngay</Link>
                     </div>
                 </div>
             </main>

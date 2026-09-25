@@ -58,7 +58,7 @@ export default function BookingsDashboardPage() {
     return (
       <div className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
         <h2>Bạn cần đăng nhập để xem lịch học</h2>
-        <Link to="/login" className="btn btn-primary" style={{ marginTop: '16px', display: 'inline-block' }}>Đăng nhập ngay</Link>
+        <Link to="/dang-nhap" className="btn btn-primary" style={{ marginTop: '16px', display: 'inline-block' }}>Đăng nhập ngay</Link>
       </div>
     );
   }
