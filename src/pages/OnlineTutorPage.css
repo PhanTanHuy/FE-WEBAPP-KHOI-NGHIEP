@@ -129,18 +129,18 @@
    FILTER SECTION
    ========================================================= */
 
-.filter-section {
+.online-tutor-page .filter-section {
     padding: 10px 12px;
 
     border-bottom: 1px solid #edf1f5;
 }
 
-.filter-section:last-child {
+.online-tutor-page .filter-section:last-child {
     border-bottom: none;
 }
 
 
-.filter-section-title {
+.online-tutor-page .filter-section-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -153,7 +153,7 @@
     font-weight: 700;
 }
 
-.filter-section-title>div {
+.online-tutor-page .filter-section-title>div {
     display: flex;
     align-items: center;
 
@@ -161,12 +161,12 @@
 }
 
 
-.filter-section-title svg {
+.online-tutor-page .filter-section-title svg {
     color: #365a80;
 }
 
 
-.filter-section-content {
+.online-tutor-page .filter-section-content {
     font-size: 0.7rem;
 }
 

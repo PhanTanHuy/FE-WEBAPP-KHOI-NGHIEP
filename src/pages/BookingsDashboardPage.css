@@ -1,0 +1,167 @@
+.bookings-dashboard {
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-btn:hover {
+  color: #1e293b;
+}
+
+.tab-btn.active {
+  color: #2563eb;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #2563eb;
+  border-radius: 2px;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.booking-list-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.booking-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.booking-id {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pending { background-color: #fef3c7; color: #d97706; }
+.status-confirmed { background-color: #dcfce7; color: #15803d; }
+.status-rejected { background-color: #fee2e2; color: #b91c1c; }
+.status-cancelled { background-color: #f1f5f9; color: #64748b; }
+.status-completed { background-color: #e0e7ff; color: #4338ca; }
+
+.booking-card-body {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.booking-party-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 250px;
+}
+
+.party-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.party-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 16px;
+}
+
+.party-role {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.booking-details {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  font-size: 14px;
+}
+
+.detail-notes {
+  align-items: flex-start;
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.booking-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  color: #64748b;
+  font-size: 16px;
+}

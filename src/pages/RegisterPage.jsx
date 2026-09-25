@@ -12,6 +12,7 @@ import {
     CheckCircle2
 } from 'lucide-react';
 
+import { useAuth } from '../context/AuthContext';
 import './RegisterPage.css';
 
 export default function RegisterPage() {
@@ -36,41 +37,60 @@ export default function RegisterPage() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const { register } = useAuth();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
 
         if (!form.fullName.trim()) {
-            alert('Vui lòng nhập họ và tên.');
+            setError('Vui lòng nhập họ và tên.');
             return;
         }
 
         if (!form.email.trim()) {
-            alert('Vui lòng nhập email.');
+            setError('Vui lòng nhập email.');
             return;
         }
 
         if (!form.phone.trim()) {
-            alert('Vui lòng nhập số điện thoại.');
+            setError('Vui lòng nhập số điện thoại.');
             return;
         }
 
         if (form.password.length < 6) {
-            alert('Mật khẩu phải có ít nhất 6 ký tự.');
+            setError('Mật khẩu phải có ít nhất 6 ký tự.');
             return;
         }
 
         if (form.password !== form.confirmPassword) {
-            alert('Mật khẩu xác nhận không khớp.');
+            setError('Mật khẩu xác nhận không khớp.');
             return;
         }
 
         if (!form.agree) {
-            alert('Vui lòng đồng ý với điều khoản sử dụng.');
+            setError('Vui lòng đồng ý với điều khoản sử dụng.');
             return;
         }
 
-        // Sau này kết nối API đăng ký tại đây.
-        alert('Đăng ký tài khoản thành công!');
+        setIsLoading(true);
+        const result = await register({
+            full_name: form.fullName,
+            email: form.email,
+            phone: form.phone,
+            password: form.password
+        });
+
+        if (result.success) {
+            alert('Đăng ký tài khoản thành công!');
+            navigate('/');
+        } else {
+            setError(result.message);
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -104,6 +124,13 @@ export default function RegisterPage() {
                                 EduConnect.
                             </p>
                         </div>
+
+                        {error && (
+                            <div className="login-error" style={{ color: 'red', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <CheckCircle2 size={16} style={{display: 'none'}} />
+                                <span>{error}</span>
+                            </div>
+                        )}
 
                         <form
                             className="register-form"
@@ -320,9 +347,10 @@ export default function RegisterPage() {
                             <button
                                 type="submit"
                                 className="register-submit"
+                                disabled={isLoading}
                             >
-                                Tạo tài khoản
-                                <ArrowRight size={18} />
+                                {isLoading ? 'Đang tạo...' : 'Tạo tài khoản'}
+                                {!isLoading && <ArrowRight size={18} />}
                             </button>
 
                         </form>

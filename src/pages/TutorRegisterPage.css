@@ -271,18 +271,18 @@
     padding: 26px 28px;
 }
 
-.register-heading {
+.tutor-register-page .register-heading {
     margin-bottom: 18px;
 }
 
-.register-heading h1 {
+.tutor-register-page .register-heading h1 {
     margin: 0 0 5px;
     color: #163f70;
     font-size: 25px;
     font-weight: 800;
 }
 
-.register-heading p {
+.tutor-register-page .register-heading p {
     margin: 0;
     color: #7190aa;
     font-size: 12px;
@@ -1111,7 +1111,7 @@
         grid-template-columns: 1fr;
     }
 
-    .register-heading h1 {
+    .tutor-register-page .register-heading h1 {
         font-size: 22px;
     }
 }

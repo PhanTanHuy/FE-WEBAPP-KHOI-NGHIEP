@@ -71,18 +71,18 @@
     box-shadow: 0 5px 13px rgba(22, 142, 230, 0.2);
 }
 
-.register-heading {
+.register-page .register-heading {
     margin-bottom: 25px;
 }
 
-.register-heading h1 {
+.register-page .register-heading h1 {
     margin: 0 0 7px;
     color: #173f6b;
     font-size: 29px;
     font-weight: 800;
 }
 
-.register-heading p {
+.register-page .register-heading p {
     margin: 0;
     color: #7d96aa;
     font-size: 13px;
@@ -532,7 +532,7 @@
         margin-bottom: 30px;
     }
 
-    .register-heading h1 {
+    .register-page .register-heading h1 {
         font-size: 25px;
     }
 

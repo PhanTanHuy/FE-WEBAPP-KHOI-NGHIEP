@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { getTutors } from '../api/tutors';
 import { Link } from 'react-router-dom';
 import {
     Search,
@@ -9,7 +10,6 @@ import {
     Star,
     MapPin,
     Video,
-    Home,
     CalendarDays,
     CheckCircle,
     UserRoundSearch,
@@ -19,146 +19,6 @@ import {
 } from 'lucide-react';
 
 import './TrialPage.css';
-
-
-const tutors = [
-    {
-        id: 1,
-        name: 'Nguyễn Hoàng Anh',
-        image: 'https://randomuser.me/api/portraits/women/44.jpg',
-        role: 'Sinh viên',
-        rating: 4.9,
-        reviews: 120,
-        lessons: 150,
-        location: 'Quận 1, TP.HCM',
-        subjects: ['Tiếng Anh', 'IELTS', 'Giao tiếp'],
-        price: '200.000đ / giờ',
-        trial: 'Học thử 1 buổi miễn phí',
-        trialType: 'free',
-        trialDetail: '(45 phút)',
-        badge: 'Học thử miễn phí',
-        form: 'Online / Tại nhà'
-    },
-    {
-        id: 2,
-        name: 'Trần Minh Đức',
-        image: 'https://randomuser.me/api/portraits/men/32.jpg',
-        role: 'Giáo viên',
-        rating: 4.8,
-        reviews: 89,
-        lessons: 320,
-        location: 'Quận 3, TP.HCM',
-        subjects: ['Toán', 'Vật lý', 'Luyện thi 10'],
-        price: '250.000đ / giờ',
-        trial: 'Học thử chỉ 50.000đ',
-        trialType: 'discount',
-        trialDetail: '(60 phút)',
-        badge: 'Học thử giảm 50%',
-        form: 'Online / Tại nhà'
-    },
-    {
-        id: 3,
-        name: 'Lê Thùy Linh',
-        image: 'https://randomuser.me/api/portraits/women/68.jpg',
-        role: 'Sinh viên',
-        rating: 4.7,
-        reviews: 85,
-        lessons: 120,
-        location: 'Bình Thạnh, TP.HCM',
-        subjects: ['Ngữ văn', 'Kỹ năng viết', 'THCS'],
-        price: '180.000đ / giờ',
-        trial: 'Học thử 1 buổi miễn phí',
-        trialType: 'free',
-        trialDetail: '(45 phút)',
-        badge: 'Học thử miễn phí',
-        form: 'Online'
-    },
-    {
-        id: 4,
-        name: 'Phạm Gia Huy',
-        image: 'https://randomuser.me/api/portraits/men/45.jpg',
-        role: 'Giáo viên',
-        rating: 4.9,
-        reviews: 110,
-        lessons: 260,
-        location: 'Phú Nhuận, TP.HCM',
-        subjects: ['Tiếng Trung', 'HSK', 'Giao tiếp'],
-        price: '220.000đ / giờ',
-        trial: 'Học thử chỉ 1.000đ',
-        trialType: 'cheap',
-        trialDetail: '(45 phút)',
-        badge: 'Học thử 1K',
-        form: 'Online / Tại nhà'
-    },
-    {
-        id: 5,
-        name: 'Trần Ngọc Mai',
-        image: 'https://randomuser.me/api/portraits/women/65.jpg',
-        role: 'Sinh viên',
-        rating: 4.8,
-        reviews: 76,
-        lessons: 90,
-        location: 'Quận 5, TP.HCM',
-        subjects: ['Tiếng Nhật', 'JLPT', 'Giao tiếp'],
-        price: '180.000đ / giờ',
-        trial: 'Học thử 1 buổi miễn phí',
-        trialType: 'free',
-        trialDetail: '(45 phút)',
-        badge: 'Học thử miễn phí',
-        form: 'Online'
-    },
-    {
-        id: 6,
-        name: 'Hoàng Văn Phúc',
-        image: 'https://randomuser.me/api/portraits/men/51.jpg',
-        role: 'Chuyên gia',
-        rating: 4.9,
-        reviews: 101,
-        lessons: 280,
-        location: 'Quận 1, TP.HCM',
-        subjects: ['Hóa học', 'Sinh học', 'Luyện thi ĐH'],
-        price: '300.000đ / giờ',
-        trial: 'Học thử chỉ 50.000đ',
-        trialType: 'discount',
-        trialDetail: '(60 phút)',
-        badge: 'Học thử giảm 50%',
-        form: 'Online'
-    },
-    {
-        id: 7,
-        name: 'Đỗ Bảo Ngọc',
-        image: 'https://randomuser.me/api/portraits/women/32.jpg',
-        role: 'Sinh viên',
-        rating: 4.7,
-        reviews: 92,
-        lessons: 160,
-        location: 'Bình Thạnh, TP.HCM',
-        subjects: ['Tiếng Anh', 'IELTS', 'Phát âm'],
-        price: '220.000đ / giờ',
-        trial: 'Học thử 1 buổi miễn phí',
-        trialType: 'free',
-        trialDetail: '(45 phút)',
-        badge: 'Học thử miễn phí',
-        form: 'Online / Tại nhà'
-    },
-    {
-        id: 8,
-        name: 'Lý Minh Khôi',
-        image: 'https://randomuser.me/api/portraits/men/68.jpg',
-        role: 'Giáo viên',
-        rating: 4.8,
-        reviews: 134,
-        lessons: 360,
-        location: 'Gò Vấp, TP.HCM',
-        subjects: ['Toán', 'THCS', 'Luyện thi vào 10'],
-        price: '250.000đ / giờ',
-        trial: 'Học thử chỉ 1.000đ',
-        trialType: 'cheap',
-        trialDetail: '(45 phút)',
-        badge: 'Học thử 1K',
-        form: 'Tại nhà'
-    }
-];
 
 
 const quickFilters = [
@@ -213,8 +73,54 @@ function Checkbox({ label, checked = false }) {
 export default function TrialPage() {
 
     const [activePage, setActivePage] = useState(1);
-
     const [search, setSearch] = useState('');
+    const [tutorsList, setTutorsList] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getTutors({ paginate: false })
+            .then(data => {
+                const list = Array.isArray(data) ? data : (data?.items || []);
+                setTutorsList(list);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error('Error fetching trial tutors:', err);
+                setLoading(false);
+            });
+    }, []);
+
+    const tutors = useMemo(() => {
+        return tutorsList.map((tutor, idx) => {
+            const trialTypes = ['free', 'discount', 'free', 'cheap', 'free'];
+            const badges = ['Học thử miễn phí', 'Học thử giảm 50%', 'Học thử miễn phí', 'Học thử 1K', 'Học thử miễn phí'];
+            const trials = ['Học thử 1 buổi miễn phí', 'Học thử chỉ 50.000đ', 'Học thử 1 buổi miễn phí', 'Học thử chỉ 1.000đ', 'Học thử 1 buổi miễn phí'];
+            const tType = trialTypes[idx % trialTypes.length];
+            const bText = badges[idx % badges.length];
+            const trText = trials[idx % trials.length];
+
+            const mode = tutor.teachingMode || [];
+            const form = mode.includes('online') && mode.includes('offline') ? 'Online / Tại nhà' : (mode.includes('online') ? 'Online' : 'Tại nhà');
+
+            return {
+                id: tutor.id,
+                name: tutor.name,
+                image: tutor.avatar || `https://randomuser.me/api/portraits/men/${30 + idx}.jpg`,
+                role: tutor.title.includes('Thạc sĩ') || tutor.title.includes('Giáo viên') ? 'Giáo viên' : 'Sinh viên',
+                rating: tutor.rating,
+                reviews: tutor.reviewCount,
+                lessons: tutor.completedLessons,
+                location: tutor.location,
+                subjects: tutor.subjects,
+                price: `${tutor.pricePerHour.toLocaleString('vi-VN')}đ / giờ`,
+                trial: trText,
+                trialType: tType,
+                trialDetail: '(45 phút)',
+                badge: bText,
+                form: form
+            };
+        });
+    }, [tutorsList]);
 
     const filteredTutors = tutors.filter((tutor) => {
 
@@ -755,7 +661,7 @@ export default function TrialPage() {
 
 
                                     <Link
-                                        to={`/dat-lich?trial=true&tutor=${tutor.id}`}
+                                        to={`/dat-lich?trial=true&tutorId=${tutor.id}`}
                                         className="trial-book-button"
                                     >
                                         Đặt lịch học thử

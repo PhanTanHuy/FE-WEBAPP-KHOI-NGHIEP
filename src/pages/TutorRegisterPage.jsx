@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     User,
     GraduationCap,
@@ -15,85 +16,46 @@ import {
     Mail,
     CalendarDays,
     FileText,
-    Home,
-    ChevronDown
+    ChevronDown,
+    Clock3,
+    AlertCircle,
+    Loader2,
+    ExternalLink
 } from 'lucide-react';
+import {
+    initialTutorRegistrationForm,
+    tutorRegistrationGrades,
+    tutorRegistrationSteps,
+    tutorRegistrationSubjects
+} from '../data/tutorRegistration';
+import { useAuth } from '../context/AuthContext';
+import {
+    getMyTutorApplication,
+    saveTutorApplication,
+    submitTutorApplication,
+    uploadTutorFile
+} from '../api/tutorApplication';
 
 import './TutorRegisterPage.css';
 
-const steps = [
-    {
-        number: 1,
-        title: 'Thông tin cơ bản',
-        description: 'Cung cấp thông tin cá nhân'
-    },
-    {
-        number: 2,
-        title: 'Trình độ học vấn',
-        description: 'Bằng cấp, chứng chỉ, chuyên ngành'
-    },
-    {
-        number: 3,
-        title: 'Cài đặt giảng dạy',
-        description: 'Môn học, cấp học, khu vực, học phí'
-    },
-    {
-        number: 4,
-        title: 'Hoàn tất',
-        description: 'Xem lại và gửi duyệt'
-    }
-];
-
-const subjects = [
-    'Toán',
-    'Vật lý',
-    'Hóa học',
-    'Sinh học',
-    'Ngữ văn',
-    'Tiếng Anh',
-    'Tiếng Trung',
-    'Tiếng Nhật',
-    'IELTS',
-    'Khác'
-];
-
-const grades = [
-    'Tiểu học',
-    'THCS',
-    'THPT',
-    'Luyện thi vào 10',
-    'Luyện thi Đại học'
-];
-
-const initialForm = {
-    // Step 1
-    fullName: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    address: '',
-    introduction: '',
-    avatar: null,
-
-    // Step 2
-    educationLevel: '',
-    major: '',
-    certificates: [],
-    certificateFile: null,
-
-    // Step 3
-    subjects: [],
-    grades: [],
-    districts: ['', ''],
-    minPrice: 100000,
-    maxPrice: 500000
-};
+const steps = tutorRegistrationSteps;
+const subjects = tutorRegistrationSubjects;
+const grades = tutorRegistrationGrades;
+const initialForm = initialTutorRegistrationForm;
 
 export default function TutorRegisterPage() {
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
     const [form, setForm] = useState(initialForm);
     const [avatarPreview, setAvatarPreview] = useState(null);
     const [submitted, setSubmitted] = useState(false);
+    const [appId, setAppId] = useState(null);
+    const [appStatus, setAppStatus] = useState(null); // 'draft', 'pending', 'approved', 'rejected'
+    const [rejectionReason, setRejectionReason] = useState(null);
+    const [saving, setSaving] = useState(false);
+    const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const [uploadingCert, setUploadingCert] = useState(false);
 
     const avatarInputRef = useRef(null);
     const certificateInputRef = useRef(null);
@@ -120,21 +82,79 @@ export default function TutorRegisterPage() {
         });
     };
 
-    const handleAvatarChange = (event) => {
-        const file = event.target.files?.[0];
+    useEffect(() => {
+        if (user) {
+            getMyTutorApplication().then((data) => {
+                if (data) {
+                    setAppId(data.id);
+                    setAppStatus(data.status);
+                    setRejectionReason(data.rejectionReason);
+                    setForm({
+                        fullName: data.fullName || user.full_name || '',
+                        birthday: data.birthday || '',
+                        phone: data.phone || user.phone || '',
+                        email: data.email || user.email || '',
+                        address: data.address || '',
+                        introduction: data.introduction || '',
+                        avatar: data.avatar || null,
+                        educationLevel: data.educationLevel || '',
+                        major: data.major || '',
+                        school: data.school || '',
+                        year: data.year || '',
+                        certificates: data.certificates || [],
+                        certificateFile: data.certificateFile || null,
+                        subjects: data.subjects || [],
+                        grades: data.grades || [],
+                        districts: data.districts?.length ? data.districts : ['', ''],
+                        city: data.city || 'TP.HCM',
+                        minPrice: data.minPrice || 100000,
+                        maxPrice: data.maxPrice || 500000,
+                    });
+                    if (data.avatar) {
+                        setAvatarPreview(data.avatar);
+                    }
+                } else {
+                    setForm((prev) => ({
+                        ...prev,
+                        fullName: user.full_name || '',
+                        email: user.email || '',
+                        phone: user.phone || '',
+                    }));
+                }
+            });
+        }
+    }, [user]);
 
+    const handleAvatarChange = async (event) => {
+        const file = event.target.files?.[0];
         if (!file) return;
 
-        updateForm('avatar', file);
         setAvatarPreview(URL.createObjectURL(file));
+        try {
+            setUploadingAvatar(true);
+            const res = await uploadTutorFile(file, 'avatar');
+            updateForm('avatar', res.url);
+        } catch (err) {
+            alert(err.message || 'Lỗi khi tải ảnh lên');
+        } finally {
+            setUploadingAvatar(false);
+        }
     };
 
-    const handleCertificateChange = (event) => {
+    const handleCertificateChange = async (event) => {
         const file = event.target.files?.[0];
-
         if (!file) return;
 
-        updateForm('certificateFile', file);
+        try {
+            setUploadingCert(true);
+            const res = await uploadTutorFile(file, 'document');
+            updateForm('certificateFile', res.url);
+            alert('Tải lên tệp chứng chỉ thành công!');
+        } catch (err) {
+            alert(err.message || 'Lỗi khi tải chứng chỉ lên');
+        } finally {
+            setUploadingCert(false);
+        }
     };
 
     const handleDistrictChange = (index, value) => {
@@ -224,29 +244,52 @@ export default function TutorRegisterPage() {
         }
     };
 
-    const handleSubmit = () => {
-        setSubmitted(true);
+    const handleSubmit = async () => {
+        if (!user) {
+            alert('Vui lòng đăng nhập trước khi gửi duyệt hồ sơ.');
+            navigate('/dang-nhap');
+            return;
+        }
 
-        /*
-         * Sau này khi có Backend:
-         * await fetch('/api/tutors/register', {
-         *   method: 'POST',
-         *   body: ...
-         * });
-         */
+        try {
+            setSaving(true);
+            const saved = await saveTutorApplication(form);
+            const submittedRes = await submitTutorApplication(saved.id);
+            setAppId(submittedRes.id);
+            setAppStatus('pending');
+            setSubmitted(true);
+        } catch (err) {
+            alert(err.message || 'Lỗi khi gửi duyệt hồ sơ');
+        } finally {
+            setSaving(false);
+        }
     };
 
-    const handleSaveDraft = () => {
-        localStorage.setItem(
-            'educonnect_tutor_register_draft',
-            JSON.stringify({
-                ...form,
-                avatar: null,
-                certificateFile: null
-            })
-        );
+    const handleSaveDraft = async () => {
+        if (!user) {
+            localStorage.setItem(
+                'educonnect_tutor_register_draft',
+                JSON.stringify({
+                    ...form,
+                    avatar: null,
+                    certificateFile: null
+                })
+            );
+            alert('Đã lưu bản nháp tạm vào trình duyệt. Hãy đăng nhập để lưu trữ trên hệ thống!');
+            return;
+        }
 
-        alert('Đã lưu bản nháp.');
+        try {
+            setSaving(true);
+            const res = await saveTutorApplication(form);
+            setAppId(res.id);
+            setAppStatus(res.status);
+            alert('Đã lưu bản nháp hồ sơ gia sư lên máy chủ thành công!');
+        } catch (err) {
+            alert(err.message || 'Lỗi khi lưu bản nháp');
+        } finally {
+            setSaving(false);
+        }
     };
 
     if (submitted) {
@@ -357,6 +400,42 @@ export default function TutorRegisterPage() {
                             <strong>{progress}%</strong>
                         </div>
                     </div>
+                    {/* STATUS NOTICES */}
+                    {!user && (
+                        <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', padding: '14px 18px', borderRadius: '12px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px', color: '#1E40AF', fontSize: '14px' }}>
+                            <AlertCircle size={20} style={{ flexShrink: 0 }} />
+                            <div>
+                                <strong>Lưu ý:</strong> Bạn chưa đăng nhập. Vui lòng <Link to="/dang-nhap" style={{ textDecoration: 'underline', fontWeight: 'bold', color: '#1D4ED8' }}>Đăng nhập</Link> hoặc <Link to="/dang-ky" style={{ textDecoration: 'underline', fontWeight: 'bold', color: '#1D4ED8' }}>Đăng ký</Link> để lưu hồ sơ vào hệ thống khi gửi duyệt.
+                            </div>
+                        </div>
+                    )}
+
+                    {appStatus === 'pending' && (
+                        <div style={{ background: '#FEF3C7', border: '1px solid #FCD34D', padding: '14px 18px', borderRadius: '12px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px', color: '#B45309', fontSize: '14px' }}>
+                            <Clock3 size={20} style={{ flexShrink: 0 }} />
+                            <div>
+                                <strong>Hồ sơ đang chờ duyệt:</strong> Hồ sơ của bạn đã được gửi lên hệ thống và đang chờ Admin phê duyệt. Bạn vẫn có thể chỉnh sửa và cập nhật lại thông tin bất cứ lúc nào.
+                            </div>
+                        </div>
+                    )}
+
+                    {appStatus === 'approved' && (
+                        <div style={{ background: '#DCFCE7', border: '1px solid #86EFAC', padding: '14px 18px', borderRadius: '12px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px', color: '#15803D', fontSize: '14px' }}>
+                            <CheckCircle2 size={20} style={{ flexShrink: 0 }} />
+                            <div>
+                                <strong>Chúc mừng! Hồ sơ của bạn đã được phê duyệt.</strong> Thông tin gia sư của bạn hiện đang hiển thị công khai trên danh sách tìm kiếm gia sư.
+                            </div>
+                        </div>
+                    )}
+
+                    {appStatus === 'rejected' && (
+                        <div style={{ background: '#FEE2E2', border: '1px solid #FCA5A5', padding: '14px 18px', borderRadius: '12px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px', color: '#B91C1C', fontSize: '14px' }}>
+                            <AlertCircle size={20} style={{ flexShrink: 0 }} />
+                            <div>
+                                <strong>Hồ sơ cần cập nhật:</strong> {rejectionReason || 'Vui lòng bổ sung đầy đủ thông tin bằng cấp/chứng chỉ và nộp lại hồ sơ.'}
+                            </div>
+                        </div>
+                    )}
 
                     {/* STEP 1 */}
                     {currentStep === 1 && (

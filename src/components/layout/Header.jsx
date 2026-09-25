@@ -7,10 +7,15 @@ import {
   Search,
   Bell,
   User,
-  LogIn
+  LogIn,
+  LogOut,
+  ShieldCheck,
+  Calendar,
+  TrendingUp
 } from 'lucide-react';
 
 import './Header.css';
+import { useAuth } from '../../context/AuthContext';
 
 const navLinks = [
   {
@@ -24,6 +29,10 @@ const navLinks = [
   {
     to: '/tim-gia-su',
     label: 'Tìm gia sư'
+  },
+  {
+    to: '/tien-do',
+    label: 'Tiến độ học tập'
   },
   {
     to: '/dich-vu',
@@ -42,7 +51,9 @@ const navLinks = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isLoggedIn] = useState(false);
+  
+  const { user, logout } = useAuth();
+  const isLoggedIn = !!user;
 
   const navigate = useNavigate();
 
@@ -158,18 +169,55 @@ export default function Header() {
               </button>
 
 
-              {/* Avatar */}
+              {user?.role === 'admin' && (
+                <Link
+                  to="/admin/duyet-gia-su"
+                  className="btn btn-warning btn-sm hide-mobile"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }}
+                  title="Duyệt hồ sơ gia sư"
+                >
+                  <ShieldCheck size={16} />
+                  Duyệt gia sư
+                </Link>
+              )}
 
-              <Link
-                to="/ho-so"
-                className="header__avatar"
-              >
-                <img
-                  src="https://i.pravatar.cc/150?img=50"
-                  alt="Avatar"
-                  className="avatar avatar-sm"
-                />
-              </Link>
+              {/* Avatar & Bookings */}
+
+              <div className="header__user-menu" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Link
+                  to="/tien-do"
+                  className="btn btn-outline btn-sm hide-mobile"
+                  title="Tiến độ học tập"
+                >
+                  <TrendingUp size={16} />
+                </Link>
+                <Link
+                  to="/quan-ly-dat-lich"
+                  className="btn btn-outline btn-sm hide-mobile"
+                  title="Quản lý đặt lịch"
+                >
+                  <Calendar size={16} />
+                </Link>
+                <Link
+                  to="/ho-so"
+                  className="header__avatar"
+                  title="Hồ sơ cá nhân"
+                >
+                  <img
+                    src={user?.avatar_url || `https://ui-avatars.com/api/?name=${user?.full_name || 'User'}&background=random`}
+                    alt="Avatar"
+                    className="avatar avatar-sm"
+                  />
+                  <span className="user-name hide-mobile">{user?.full_name}</span>
+                </Link>
+                <button 
+                  onClick={() => logout()}
+                  className="btn btn-outline btn-sm hide-mobile" 
+                  title="Đăng xuất"
+                >
+                  <LogOut size={16} />
+                </button>
+              </div>
             </>
 
           ) : (
