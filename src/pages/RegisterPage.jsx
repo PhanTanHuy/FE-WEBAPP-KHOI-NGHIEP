@@ -25,8 +25,7 @@ export default function RegisterPage() {
     if (form.fullName.trim().length < 2) return 'Vui lòng nhập họ và tên hợp lệ.';
     if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) return 'Email không hợp lệ.';
     if (!/^\+?[\d\s.-]{9,18}$/.test(form.phone.trim())) return 'Số điện thoại không hợp lệ.';
-    if (form.password.length < 8) return 'Mật khẩu phải có ít nhất 8 ký tự.';
-    if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password)) return 'Mật khẩu phải có cả chữ và số.';
+    if (form.password.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự.';
     if (form.password !== form.confirmPassword) return 'Mật khẩu xác nhận không khớp.';
     if (!form.agree) return 'Vui lòng đồng ý với điều khoản sử dụng.';
     return '';
@@ -70,7 +69,7 @@ export default function RegisterPage() {
               <Field label="Số điện thoại" icon={<Phone size={18} />}>
                 <input type="tel" autoComplete="tel" placeholder="0987 654 321" value={form.phone} onChange={(e) => update('phone', e.target.value)} />
               </Field>
-              <Field label="Mật khẩu" icon={<Lock size={18} />} hint="Ít nhất 8 ký tự, gồm cả chữ và số">
+              <Field label="Mật khẩu" icon={<Lock size={18} />} hint="Ít nhất 6 ký tự">
                 <input type={showPassword ? 'text' : 'password'} autoComplete="new-password" placeholder="Nhập mật khẩu" value={form.password} onChange={(e) => update('password', e.target.value)} />
                 <PasswordToggle shown={showPassword} onClick={() => setShowPassword((value) => !value)} />
               </Field>

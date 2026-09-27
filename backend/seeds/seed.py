@@ -19,6 +19,8 @@ from app.models import (
     User,
 )
 
+from app.core.security import get_password_hash
+
 DATA_FILE = Path(__file__).with_name("mock_data.json")
 
 
@@ -39,7 +41,30 @@ def load_data() -> dict[str, list[dict[str, object]]]:
     return json.loads(DATA_FILE.read_text(encoding="utf-8"))
 
 
+def ensure_admin() -> None:
+    with SessionLocal.begin() as db:
+        admin_email = "admin@educonnect.vn"
+        user = db.scalar(select(User).filter(User.email == admin_email))
+        if user:
+            user.role = "admin"
+            if not user.password_hash:
+                user.password_hash = get_password_hash("Admin@123")
+            print(f"Ensured admin user exists: {admin_email}")
+        else:
+            admin_user = User(
+                email=admin_email,
+                full_name="Quản trị viên EduConnect",
+                phone="0900000000",
+                password_hash=get_password_hash("Admin@123"),
+                role="admin",
+                avatar_url="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff",
+            )
+            db.add(admin_user)
+            print(f"Created admin user: {admin_email} / Admin@123")
+
+
 def seed() -> None:
+    ensure_admin()
     data = load_data()
     with SessionLocal.begin() as db:
         if db.scalar(select(TutorProfile.id).limit(1)) is not None:

@@ -170,15 +170,25 @@ export default function Header() {
 
 
               {user?.role === 'admin' && (
-                <Link
-                  to="/admin/duyet-gia-su"
-                  className="btn btn-warning btn-sm hide-mobile"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }}
-                  title="Duyệt hồ sơ gia sư"
-                >
-                  <ShieldCheck size={16} />
-                  Duyệt gia sư
-                </Link>
+                <>
+                  <Link
+                    to="/admin"
+                    className="btn btn-outline btn-sm hide-mobile"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                    title="Bảng điều khiển Admin"
+                  >
+                    <ShieldCheck size={16} />
+                    Quản trị
+                  </Link>
+                  <Link
+                    to="/admin/duyet-gia-su"
+                    className="btn btn-warning btn-sm hide-mobile"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }}
+                    title="Duyệt hồ sơ gia sư"
+                  >
+                    Duyệt gia sư
+                  </Link>
+                </>
               )}
 
               {/* Avatar & Bookings */}
