@@ -11,6 +11,8 @@ from app.routers.materials import router as materials_router
 from app.routers.rides import router as rides_router
 from app.routers.admin import router as admin_router
 from app.routers.analytics import router as analytics_router
+from app.routers.feedback import router as feedback_router
+
 
 __all__ = [
     "subjects_router",
@@ -25,5 +27,6 @@ __all__ = [
     "materials_router",
     "rides_router",
     "admin_router",
-    "analytics_router"
+    "analytics_router",
+    "feedback_router",
 ]

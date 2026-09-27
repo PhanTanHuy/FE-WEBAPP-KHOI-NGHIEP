@@ -4,7 +4,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
-
+from sqlalchemy.dialects.postgresql import JSONB
 tutor_subjects = Table(
     "tutor_subjects",
     Base.metadata,
@@ -386,3 +386,26 @@ class AnalyticsEvent(Base):
     created_at = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False, index=True)
 
 
+class FeedbackSubmission(Base):
+    __tablename__ = "feedback_submissions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, nullable=True, index=True)
+
+    role = Column(String(50), nullable=False)
+    source = Column(String(100), nullable=True)
+    purpose = Column(String(100), nullable=True)
+    found_information = Column(String(100), nullable=True)
+    ease_of_use = Column(Integer, nullable=True)
+    tutor_priority = Column(String(100), nullable=True)
+    price_range = Column(String(100), nullable=True)
+    trust_level = Column(Integer, nullable=True)
+    usage_intention = Column(String(100), nullable=True)
+    difficulty = Column(Text, nullable=True)
+    desired_features = Column(Text, nullable=True)
+
+    contact_requested = Column(Boolean, default=False, nullable=False)
+    contact_value = Column(String(255), nullable=True)
+
+    answers = Column(JSONB, default=dict, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

@@ -9,6 +9,7 @@ from app.models.models import (
     TutorCertificate,
     TutorAvailability,
     Review,
+    FeedbackSubmission,
     tutor_subjects,
     tutor_levels
 )
@@ -24,6 +25,7 @@ __all__ = [
     "TutorCertificate",
     "TutorAvailability",
     "Review",
+    "FeedbackSubmission",
     "tutor_subjects",
     "tutor_levels"
 ]

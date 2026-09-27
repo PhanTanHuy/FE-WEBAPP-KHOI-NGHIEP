@@ -22,7 +22,7 @@ from app.routers import (
     subjects_router, levels_router, locations_router,
     tutors_router, auth_router, tutor_applications_router,
     bookings_router, reviews_router, progress_router,
-    materials_router, rides_router, admin_router, analytics_router
+    materials_router, rides_router, admin_router, analytics_router, feedback_router
 )
 
 app = FastAPI(
@@ -69,6 +69,7 @@ app.include_router(materials_router, prefix=settings.API_V1_STR)
 app.include_router(rides_router, prefix=settings.API_V1_STR)
 app.include_router(admin_router, prefix=settings.API_V1_STR)
 app.include_router(analytics_router, prefix=settings.API_V1_STR)
+app.include_router(feedback_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():
