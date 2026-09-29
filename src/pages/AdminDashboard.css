@@ -225,3 +225,972 @@
 .audit-list .action {
   color: #334155;
 }
+/* =========================================================
+   FEEDBACK ADMIN
+========================================================= */
+
+.feedback-admin-card {
+  overflow: hidden;
+}
+
+.feedback-admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.feedback-admin-header h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.feedback-admin-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.feedback-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedback-refresh-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.feedback-refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   FEEDBACK TABLE
+========================================================= */
+
+.feedback-table {
+  min-width: 1100px;
+}
+
+.feedback-table th {
+  white-space: nowrap;
+}
+
+.feedback-table td {
+  vertical-align: middle;
+}
+
+.feedback-role {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.feedback-role.student {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.feedback-role.parent {
+  background: #fdf2f8;
+  color: #db2777;
+}
+
+.feedback-role.tutor {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.feedback-role.admin {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+
+.feedback-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #f59e0b;
+  white-space: nowrap;
+}
+
+.feedback-rating span {
+  margin-left: 5px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.feedback-no-rating {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+
+.contact-yes {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.contact-no {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.feedback-date {
+  white-space: nowrap;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.feedback-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 11px;
+  border: 1px solid #dbeafe;
+  border-radius: 7px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.feedback-view-btn:hover {
+  background: #dbeafe;
+}
+
+
+/* =========================================================
+   LOADING / ERROR / EMPTY
+========================================================= */
+
+.feedback-admin-loading {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #6b7280;
+}
+
+.feedback-admin-error {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.feedback-empty {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.feedback-empty svg {
+  margin-bottom: 12px;
+}
+
+.feedback-empty h4 {
+  margin: 0 0 6px;
+  color: #374151;
+  font-size: 16px;
+}
+
+.feedback-empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.feedback-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.feedback-modal {
+  width: 100%;
+  max-width: 800px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+}
+
+.feedback-modal-header h3 {
+  margin: 0 0 5px;
+  color: #111827;
+  font-size: 19px;
+}
+
+.feedback-modal-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.feedback-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.feedback-modal-close:hover {
+  background: #e5e7eb;
+}
+
+
+/* =========================================================
+   FEEDBACK DETAIL
+========================================================= */
+
+.feedback-detail {
+  padding: 24px;
+}
+
+.feedback-detail-section {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.feedback-detail-section:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.feedback-detail-section h4 {
+  margin: 0 0 16px;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.feedback-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.feedback-detail-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-label {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.feedback-detail-grid strong {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.feedback-rating-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.rating-box {
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.rating-box > span {
+  display: block;
+  margin-bottom: 9px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.feedback-text {
+  margin: 0;
+  padding: 14px;
+  border-radius: 9px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.feedback-json {
+  max-height: 250px;
+  overflow: auto;
+  margin: 0;
+  padding: 15px;
+  border-radius: 8px;
+  background: #111827;
+  color: #e5e7eb;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.feedback-detail-loading {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+.spin {
+  animation: feedback-spin 1s linear infinite;
+}
+
+@keyframes feedback-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  .admin-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+  }
+
+  .admin-logo {
+    padding: 1.25rem;
+    font-size: 1.1rem;
+  }
+
+  .admin-nav {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .admin-nav-item {
+    padding: 0.75rem 0.8rem;
+    font-size: 14px;
+  }
+
+  .admin-topbar {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .admin-content {
+    padding: 1.5rem;
+  }
+
+  .admin-card {
+    padding: 1.25rem;
+  }
+
+  /*
+   * Cho phép table scroll ngang
+   * thay vì làm vỡ layout
+   */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table {
+    min-width: 700px;
+  }
+
+  .feedback-table {
+    min-width: 1000px;
+  }
+
+  .feedback-admin-header {
+    gap: 15px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  /* =========================
+     MAIN LAYOUT
+  ========================= */
+
+  .admin-container {
+    display: block;
+    min-height: 100vh;
+  }
+
+
+  /* =========================
+     SIDEBAR
+  ========================= */
+
+  .admin-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .admin-logo {
+    padding: 1rem 1.25rem;
+    min-height: 60px;
+    box-sizing: border-box;
+  }
+
+  .admin-nav {
+    padding: 0.5rem 0.75rem 0.75rem;
+
+    /*
+     * Các menu chuyển thành hàng ngang
+     */
+    flex-direction: row;
+
+    gap: 6px;
+
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    /*
+     * Không cho scrollbar làm xấu giao diện
+     */
+    scrollbar-width: none;
+  }
+
+  .admin-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-nav-item {
+    flex: 0 0 auto;
+
+    min-height: 42px;
+
+    padding: 0.65rem 0.8rem;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+  }
+
+
+  /* =========================
+     MAIN
+  ========================= */
+
+  .admin-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+
+  /* =========================
+     TOPBAR
+  ========================= */
+
+  .admin-topbar {
+    padding: 1rem 1rem;
+
+    gap: 12px;
+  }
+
+  .admin-topbar h2 {
+    font-size: 1.2rem;
+
+    /*
+     * Nếu tiêu đề dài thì không làm vỡ layout
+     */
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .admin-profile {
+    gap: 0.5rem;
+    font-size: 13px;
+
+    flex-shrink: 0;
+  }
+
+  .admin-profile .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+
+  /* =========================
+     CONTENT
+  ========================= */
+
+  .admin-content {
+    padding: 1rem;
+  }
+
+  .admin-card {
+    padding: 1rem;
+
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+
+  /* =========================
+     NORMAL TABLE
+  ========================= */
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+
+    /*
+     * Cho phép vuốt ngang trên mobile
+     */
+    scrollbar-width: thin;
+  }
+
+  .admin-table {
+    min-width: 650px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.75rem;
+
+    font-size: 13px;
+  }
+
+  .admin-table th {
+    font-size: 12px;
+  }
+
+
+  /* =========================
+     MATERIAL / APPLICATION
+  ========================= */
+
+  .material-item,
+  .application-item {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    padding: 1rem 0;
+  }
+
+  .material-info,
+  .app-info {
+    width: 100%;
+  }
+
+  .material-info h4,
+  .app-info h4 {
+    font-size: 15px;
+  }
+
+  .material-info p,
+  .app-info p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .material-actions,
+  .app-actions {
+    width: 100%;
+  }
+
+  .material-actions .btn-sm,
+  .app-actions .btn-sm {
+    flex: 1;
+  }
+
+
+  /* =========================
+     AUDIT LOG
+  ========================= */
+
+  .audit-list li {
+    flex-direction: column;
+
+    gap: 4px;
+
+    padding: 0.75rem 0;
+  }
+
+  .audit-list .time {
+    width: auto;
+
+    font-size: 12px;
+  }
+
+  .audit-list .action {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+
+  /* =====================================================
+     FEEDBACK
+  ===================================================== */
+
+  .feedback-admin-header {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+  }
+
+  .feedback-admin-header h3 {
+    font-size: 18px;
+  }
+
+  .feedback-admin-header p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .feedback-refresh-btn {
+    width: 100%;
+
+    justify-content: center;
+
+    min-height: 42px;
+  }
+
+
+  /*
+   * Feedback table không ép co nhỏ.
+   * Cho phép scroll ngang.
+   */
+  .feedback-table {
+    min-width: 1000px;
+  }
+
+  .feedback-table th,
+  .feedback-table td {
+    padding: 0.75rem;
+
+    font-size: 13px;
+  }
+
+
+  /* =========================
+     FEEDBACK MODAL
+  ========================= */
+
+  .feedback-modal-overlay {
+    padding: 10px;
+
+    align-items: center;
+  }
+
+  .feedback-modal {
+    width: 100%;
+
+    max-width: none;
+
+    max-height: calc(100vh - 20px);
+
+    border-radius: 12px;
+  }
+
+  .feedback-modal-header {
+    padding: 15px;
+
+    gap: 12px;
+  }
+
+  .feedback-modal-header h3 {
+    font-size: 17px;
+  }
+
+  .feedback-modal-header p {
+    font-size: 12px;
+  }
+
+  .feedback-modal-close {
+    width: 34px;
+    height: 34px;
+  }
+
+  .feedback-detail {
+    padding: 15px;
+  }
+
+  .feedback-detail-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .feedback-rating-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .feedback-detail-section {
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+  }
+
+  .feedback-detail-section h4 {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .feedback-detail-grid strong {
+    font-size: 13px;
+  }
+
+  .feedback-text {
+    padding: 12px;
+
+    font-size: 13px;
+  }
+
+  .feedback-json {
+    font-size: 11px;
+
+    max-height: 200px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - SMALL PHONE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  /* =========================
+     LOGO
+  ========================= */
+
+  .admin-logo {
+    padding: 0.9rem 1rem;
+
+    font-size: 1rem;
+  }
+
+
+  /* =========================
+     NAV
+  ========================= */
+
+  .admin-nav {
+    padding: 0.4rem 0.5rem 0.6rem;
+  }
+
+  .admin-nav-item {
+    min-height: 40px;
+
+    padding: 0.6rem 0.7rem;
+
+    font-size: 12px;
+
+    gap: 0.4rem;
+  }
+
+  .admin-nav-item svg {
+    width: 16px;
+    height: 16px;
+  }
+
+
+  /* =========================
+     TOPBAR
+  ========================= */
+
+  .admin-topbar {
+    padding: 0.85rem 0.9rem;
+  }
+
+  .admin-topbar h2 {
+    font-size: 1rem;
+  }
+
+  .admin-profile span {
+    display: none;
+  }
+
+  .admin-profile .avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+
+  /* =========================
+     CONTENT
+  ========================= */
+
+  .admin-content {
+    padding: 0.75rem;
+  }
+
+  .admin-card {
+    padding: 0.85rem;
+
+    border-radius: 9px;
+  }
+
+
+  /* =========================
+     FEEDBACK
+  ========================= */
+
+  .feedback-admin-header h3 {
+    font-size: 17px;
+  }
+
+  .feedback-admin-header p {
+    font-size: 12px;
+  }
+
+  .feedback-refresh-btn {
+    font-size: 13px;
+  }
+
+
+  /* =========================
+     FEEDBACK MODAL
+  ========================= */
+
+  .feedback-modal-overlay {
+    padding: 6px;
+  }
+
+  .feedback-modal {
+    max-height: calc(100vh - 12px);
+
+    border-radius: 10px;
+  }
+
+  .feedback-modal-header {
+    padding: 13px;
+  }
+
+  .feedback-modal-header h3 {
+    font-size: 16px;
+  }
+
+  .feedback-detail {
+    padding: 13px;
+  }
+
+  .feedback-detail-section {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+  }
+
+  .rating-box {
+    padding: 12px;
+  }
+
+  .feedback-text {
+    padding: 11px;
+
+    font-size: 12px;
+  }
+
+  .feedback-json {
+    font-size: 10px;
+  }
+}

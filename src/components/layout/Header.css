@@ -1,6 +1,6 @@
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 .header {
   position: sticky;
@@ -9,30 +9,33 @@
   width: 100%;
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  transition: box-shadow 0.25s ease, background 0.25s ease;
+  transition:
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
 .header--scrolled {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
 }
 
 .header__inner {
   width: 100%;
-  max-width: 1280px;
-  height: 72px;
+  max-width: 1440px;
+  height: 68px;
   margin: 0 auto;
   padding: 0 24px;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
+
+  box-sizing: border-box;
 }
 
 
-/* =========================
+/* =========================================================
    LOGO
-========================= */
+========================================================= */
 
 .header__logo {
   flex-shrink: 0;
@@ -46,21 +49,24 @@
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
+
   border-radius: 10px;
   background: #2563eb;
-  color: white;
+  color: #ffffff;
 }
 
 .logo-text {
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 700;
+  letter-spacing: -0.3px;
   white-space: nowrap;
 }
 
@@ -69,19 +75,19 @@
 }
 
 
-/* =========================
+/* =========================================================
    DESKTOP NAV
-========================= */
+========================================================= */
 
 .header__nav {
   flex: 1;
+  min-width: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
 
-  min-width: 0;
+  gap: 2px;
 }
 
 .nav-link {
@@ -89,17 +95,18 @@
 
   display: inline-flex;
   align-items: center;
+  justify-content: center;
 
-  padding: 10px 12px;
+  padding: 9px 10px;
+
+  border-radius: 8px;
 
   color: #4b5563;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
 
   text-decoration: none;
   white-space: nowrap;
-
-  border-radius: 8px;
 
   transition:
     color 0.2s ease,
@@ -117,27 +124,36 @@
 }
 
 
-/* =========================
+/* =========================================================
    HEADER ACTIONS
-========================= */
+========================================================= */
 
 .header__actions {
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
+
+
+/* =========================================================
+   ICON ACTION
+========================================================= */
 
 .action-btn {
   position: relative;
 
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
 
   border: none;
   border-radius: 8px;
@@ -157,33 +173,298 @@
   color: #2563eb;
 }
 
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.notification-btn {
+  position: relative;
+}
+
 .notif-badge {
   position: absolute;
-  top: 3px;
-  right: 3px;
 
-  min-width: 16px;
-  height: 16px;
+  top: 1px;
+  right: 0;
+
+  min-width: 15px;
+  height: 15px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 0 4px;
+  padding: 0 3px;
 
   border-radius: 999px;
 
   background: #ef4444;
-  color: white;
+  color: #ffffff;
 
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
+
+  line-height: 1;
 }
 
 
-/* =========================
+/* =========================================================
+   ADMIN MENU
+========================================================= */
+
+.admin-menu-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.admin-menu-trigger {
+  height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 0 10px;
+
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin-menu-trigger:hover,
+.admin-menu-trigger.active {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.admin-chevron {
+  transition: transform 0.2s ease;
+}
+
+.admin-chevron.rotate {
+  transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   ADMIN DROPDOWN
+========================================================= */
+
+.admin-dropdown {
+  position: absolute;
+
+  top: calc(100% + 9px);
+  right: 0;
+
+  width: 250px;
+
+  padding: 6px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 35px rgba(15, 23, 42, 0.13);
+
+  z-index: 1100;
+}
+
+.admin-dropdown-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+
+  padding: 11px;
+
+  border-radius: 8px;
+
+  color: #374151;
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin-dropdown-item:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.admin-dropdown-item svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.admin-dropdown-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-dropdown-item strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-dropdown-item span {
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.header__quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  padding-left: 4px;
+
+  border-left: 1px solid #e5e7eb;
+}
+
+.quick-action-btn {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  color: #64748b;
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.quick-action-btn:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   USER AVATAR
+========================================================= */
+
+.header__avatar {
+  max-width: 150px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 3px 7px 3px 3px;
+
+  border-radius: 999px;
+
+  color: #374151;
+  text-decoration: none;
+
+  transition: background 0.2s ease;
+}
+
+.header__avatar:hover {
+  background: #f3f4f6;
+}
+
+.avatar {
+  display: block;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+.avatar-sm {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.avatar-md {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+}
+
+.user-name {
+  max-width: 100px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.logout-btn {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #64748b;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+/* =========================================================
    BUTTONS
-========================= */
+========================================================= */
 
 .btn {
   display: inline-flex;
@@ -197,6 +478,7 @@
   font-weight: 600;
 
   text-decoration: none;
+
   cursor: pointer;
 
   transition:
@@ -207,16 +489,15 @@
 
 .btn-sm {
   min-height: 36px;
-  padding: 7px 12px;
+  padding: 7px 11px;
 
-  font-size: 13px;
+  font-size: 12.5px;
 }
 
 .btn-primary {
   border: 1px solid #2563eb;
-
   background: #2563eb;
-  color: white;
+  color: #ffffff;
 }
 
 .btn-primary:hover {
@@ -226,8 +507,7 @@
 
 .btn-outline {
   border: 1px solid #d1d5db;
-
-  background: white;
+  background: #ffffff;
   color: #374151;
 }
 
@@ -238,82 +518,33 @@
 }
 
 .btn-warning {
-  border-radius: 8px;
+  border: 1px solid #fcd34d;
+  background: #fef3c7;
+  color: #b45309;
 }
 
 
-/* =========================
-   USER
-========================= */
-
-.header__user-menu {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.header__avatar {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-
-  padding: 4px 8px 4px 4px;
-
-  color: #374151;
-  text-decoration: none;
-
-  border-radius: 999px;
-
-  transition: background 0.2s ease;
-}
-
-.header__avatar:hover {
-  background: #f3f4f6;
-}
-
-.avatar {
-  display: block;
-
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.avatar-sm {
-  width: 34px;
-  height: 34px;
-}
-
-.user-name {
-  max-width: 120px;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  font-size: 13px;
-  font-weight: 600;
-}
-
-
-/* =========================
-   MOBILE MENU BUTTON
-========================= */
+/* =========================================================
+   MOBILE BUTTON
+========================================================= */
 
 .mobile-menu-btn {
   display: none;
 
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
 
   padding: 0;
 
   border: 1px solid #e5e7eb;
   border-radius: 8px;
 
-  background: white;
+  background: #ffffff;
   color: #374151;
 
   cursor: pointer;
@@ -324,9 +555,9 @@
 }
 
 
-/* =========================
+/* =========================================================
    MOBILE MENU
-========================= */
+========================================================= */
 
 .mobile-menu {
   display: none;
@@ -337,42 +568,51 @@
 }
 
 
-/* =========================
+/* =========================================================
    TABLET
-========================= */
+========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
+
   .header__inner {
     gap: 12px;
     padding: 0 18px;
   }
 
   .header__nav {
-    gap: 2px;
+    gap: 0;
   }
 
   .nav-link {
-    padding: 9px 8px;
-    font-size: 13px;
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 12.5px;
   }
 
   .logo-text {
     font-size: 19px;
   }
 
-  .header__actions {
-    gap: 5px;
+  .user-name {
+    max-width: 75px;
   }
 
-  .user-name {
-    max-width: 90px;
+  .admin-menu-trigger span,
+  .admin-menu-trigger .admin-chevron {
+    display: none;
+  }
+
+  .admin-menu-trigger {
+    width: 36px;
+    justify-content: center;
+    padding: 0;
   }
 }
 
 
-/* =========================
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media (max-width: 900px) {
 
@@ -381,31 +621,40 @@
     padding: 0 16px;
   }
 
-  /* Ẩn desktop navigation */
+  /* Hide desktop navigation */
   .header__nav {
     display: none;
   }
 
-  /* Desktop actions chỉ giữ search + mobile button */
   .header__actions {
     margin-left: auto;
-    gap: 6px;
+    gap: 5px;
   }
 
-  /*
-    Ẩn toàn bộ những action desktop.
-    Search vẫn hiển thị.
-  */
-  .header__actions > .hide-mobile,
-  .header__actions > .header__user-menu {
-    display: none !important;
+  /* Hide desktop-only actions */
+  .admin-menu-wrapper,
+  .header__quick-actions,
+  .header__avatar,
+  .logout-btn {
+    display: none;
   }
 
-  /*
-    Nếu đang đăng nhập:
-    notification cũng ẩn trên mobile
-  */
+  /* Notification hidden on mobile */
   #header-notif-btn {
+    display: none;
+  }
+
+  .login-btn {
+    display: none;
+  }
+
+  .register-btn {
+    display: inline-flex;
+    min-width: 40px;
+    padding: 7px 10px;
+  }
+
+  .register-btn span {
     display: none;
   }
 
@@ -418,9 +667,10 @@
     display: inline-flex;
   }
 
-  /* =========================
+
+  /* =====================================================
      MOBILE DRAWER
-  ========================= */
+  ===================================================== */
 
   .mobile-menu {
     position: fixed;
@@ -433,7 +683,7 @@
 
     display: block;
 
-    background: white;
+    background: #ffffff;
 
     transform: translateX(100%);
     visibility: hidden;
@@ -459,16 +709,25 @@
     width: 100%;
 
     padding: 12px 16px 32px;
+
+    box-sizing: border-box;
   }
+
+
+  /* =====================================================
+     MOBILE NAV LINKS
+  ===================================================== */
 
   .mobile-nav-link {
     display: flex;
     align-items: center;
 
     width: 100%;
-    min-height: 50px;
+    min-height: 48px;
 
-    padding: 13px 14px;
+    padding: 12px 14px;
+
+    box-sizing: border-box;
 
     border-radius: 10px;
 
@@ -494,20 +753,59 @@
     font-weight: 600;
   }
 
-  /* =========================
+
+  /* =====================================================
      MOBILE ACTIONS
-  ========================= */
+  ===================================================== */
 
   .mobile-nav-actions {
     display: flex;
     flex-direction: column;
-
     gap: 10px;
 
-    margin-top: 20px;
-    padding-top: 20px;
+    margin-top: 18px;
+    padding-top: 18px;
 
     border-top: 1px solid #e5e7eb;
+  }
+
+  .mobile-user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px;
+
+    margin-bottom: 4px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    color: #1e293b;
+    text-decoration: none;
+  }
+
+  .mobile-user-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    min-width: 0;
+  }
+
+  .mobile-user-card strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 14px;
+  }
+
+  .mobile-user-card span {
+    color: #64748b;
+    font-size: 12px;
   }
 
   .btn-full {
@@ -515,9 +813,41 @@
     min-height: 46px;
   }
 
-  /* =========================
+  .btn-warning-full,
+  .btn-danger-full {
+    width: 100%;
+    min-height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+  }
+
+  .btn-warning-full {
+    border: 1px solid #fcd34d;
+    background: #fef3c7;
+    color: #b45309;
+  }
+
+  .btn-danger-full {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+  }
+
+
+  /* =====================================================
      OVERLAY
-  ========================= */
+  ===================================================== */
 
   .mobile-overlay {
     position: fixed;
@@ -530,16 +860,16 @@
 
     display: block;
 
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(15, 23, 42, 0.35);
 
     z-index: 1000;
   }
 }
 
 
-/* =========================
+/* =========================================================
    SMALL PHONE
-========================= */
+========================================================= */
 
 @media (max-width: 480px) {
 
@@ -587,7 +917,7 @@
   }
 
   .mobile-nav-link {
-    min-height: 48px;
+    min-height: 46px;
     font-size: 14px;
   }
 }

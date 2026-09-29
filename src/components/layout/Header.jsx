@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   Menu,
@@ -11,7 +11,9 @@ import {
   LogOut,
   ShieldCheck,
   Calendar,
-  TrendingUp
+  TrendingUp,
+  ChevronDown,
+  UserCheck,
 } from 'lucide-react';
 
 import './Header.css';
@@ -20,44 +22,50 @@ import { useAuth } from '../../context/AuthContext';
 const navLinks = [
   {
     to: '/',
-    label: 'Trang chủ'
+    label: 'Trang chủ',
   },
   {
     to: '/gioi-thieu',
-    label: 'Giới thiệu'
+    label: 'Giới thiệu',
   },
   {
     to: '/tim-gia-su',
-    label: 'Tìm gia sư'
+    label: 'Tìm gia sư',
   },
   {
     to: '/tien-do',
-    label: 'Tiến độ học tập'
+    label: 'Tiến độ',
   },
   {
     to: '/dich-vu',
-    label: 'Dịch vụ'
+    label: 'Dịch vụ',
   },
   {
     to: '/tai-lieu',
-    label: 'Tài liệu học tập'
+    label: 'Tài liệu',
   },
   {
     to: '/lien-he',
-    label: 'Liên hệ'
-  }
+    label: 'Liên hệ',
+  },
 ];
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  
-  const { user, logout } = useAuth();
-  const isLoggedIn = !!user;
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
 
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Header thay đổi khi scroll
+  const adminMenuRef = useRef(null);
+
+  const isLoggedIn = !!user;
+  const isAdmin = user?.role === 'admin';
+
+  // =========================
+  // HEADER SCROLL
+  // =========================
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -70,7 +78,9 @@ export default function Header() {
     };
   }, []);
 
-  // Khóa scroll body khi mở mobile menu
+  // =========================
+  // LOCK BODY SCROLL MOBILE
+  // =========================
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
 
@@ -79,282 +89,425 @@ export default function Header() {
     };
   }, [mobileOpen]);
 
-  // Đóng mobile menu
+  // =========================
+  // CLOSE ADMIN MENU
+  // WHEN CLICK OUTSIDE
+  // =========================
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        adminMenuRef.current &&
+        !adminMenuRef.current.contains(event.target)
+      ) {
+        setAdminMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // =========================
+  // MOBILE
+  // =========================
   const closeMobileMenu = () => {
     setMobileOpen(false);
   };
 
-  return (
-    <header
-      className={`header ${isScrolled ? 'header--scrolled' : ''
-        }`}
-    >
+  const handleLogout = () => {
+    logout();
+    setAdminMenuOpen(false);
+    closeMobileMenu();
+    navigate('/');
+  };
 
+  // =========================
+  // AVATAR
+  // =========================
+  const avatarUrl =
+    user?.avatar_url ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      user?.full_name || 'User'
+    )}&background=random`;
+
+  return (
+    <header className={`header ${isScrolled ? 'header--scrolled' : ''}`}>
       <div className="container header__inner">
 
-        {/* ================= LOGO ================= */}
-
+        {/* =========================
+            LOGO
+        ========================= */}
         <Link
           to="/"
           className="header__logo"
           onClick={closeMobileMenu}
         >
           <div className="logo-icon">
-            <BookOpen size={22} />
+            <BookOpen size={21} />
           </div>
 
           <span className="logo-text">
-            Edu
-            <span className="logo-accent">
-              Connect
-            </span>
+            Edu<span className="logo-accent">Connect</span>
           </span>
         </Link>
 
-
-        {/* ================= DESKTOP NAV ================= */}
-
+        {/* =========================
+            DESKTOP NAV
+        ========================= */}
         <nav className="header__nav">
-
           {navLinks.map((link) => (
-
             <NavLink
               key={link.to}
               to={link.to}
               end={link.to === '/'}
               className={({ isActive }) =>
-                `nav-link ${isActive ? 'active' : ''
-                }`
+                `nav-link ${isActive ? 'active' : ''}`
               }
             >
               {link.label}
             </NavLink>
-
           ))}
-
         </nav>
 
-
-        {/* ================= ACTIONS ================= */}
-
+        {/* =========================
+            DESKTOP ACTIONS
+        ========================= */}
         <div className="header__actions">
 
           {/* Search */}
-
           <button
             className="action-btn"
             id="header-search-btn"
             onClick={() => navigate('/tim-gia-su')}
             title="Tìm kiếm gia sư"
+            aria-label="Tìm kiếm gia sư"
           >
-            <Search size={20} />
+            <Search size={19} />
           </button>
 
-
           {isLoggedIn ? (
-
             <>
               {/* Notification */}
-
               <button
-                className="action-btn"
+                className="action-btn notification-btn"
                 id="header-notif-btn"
                 title="Thông báo"
+                aria-label="Thông báo"
               >
-                <Bell size={20} />
+                <Bell size={19} />
 
                 <span className="notif-badge">
                   3
                 </span>
               </button>
 
+              {/* =========================
+                  ADMIN MENU
+              ========================= */}
+              {isAdmin && (
+                <div
+                  className="admin-menu-wrapper"
+                  ref={adminMenuRef}
+                >
+                  <button
+                    type="button"
+                    className={`admin-menu-trigger ${
+                      adminMenuOpen ? 'active' : ''
+                    }`}
+                    onClick={() =>
+                      setAdminMenuOpen((prev) => !prev)
+                    }
+                    title="Quản trị hệ thống"
+                  >
+                    <ShieldCheck size={17} />
 
-              {user?.role === 'admin' && (
-                <>
-                  <Link
-                    to="/admin"
-                    className="btn btn-outline btn-sm hide-mobile"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                    title="Bảng điều khiển Admin"
-                  >
-                    <ShieldCheck size={16} />
-                    Quản trị
-                  </Link>
-                  <Link
-                    to="/admin/duyet-gia-su"
-                    className="btn btn-warning btn-sm hide-mobile"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }}
-                    title="Duyệt hồ sơ gia sư"
-                  >
-                    Duyệt gia sư
-                  </Link>
-                </>
+                    <span>Quản trị</span>
+
+                    <ChevronDown
+                      size={15}
+                      className={`admin-chevron ${
+                        adminMenuOpen ? 'rotate' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {adminMenuOpen && (
+                    <div className="admin-dropdown">
+
+                      <Link
+                        to="/admin"
+                        className="admin-dropdown-item"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        <ShieldCheck size={17} />
+
+                        <div>
+                          <strong>Quản trị hệ thống</strong>
+                          <span>Bảng điều khiển Admin</span>
+                        </div>
+                      </Link>
+
+                      <Link
+                        to="/admin/duyet-gia-su"
+                        className="admin-dropdown-item"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        <UserCheck size={17} />
+
+                        <div>
+                          <strong>Duyệt gia sư</strong>
+                          <span>Quản lý hồ sơ gia sư</span>
+                        </div>
+                      </Link>
+
+                    </div>
+                  )}
+                </div>
               )}
 
-              {/* Avatar & Bookings */}
+              {/* =========================
+                  QUICK ACTIONS
+              ========================= */}
+              <div className="header__quick-actions">
 
-              <div className="header__user-menu" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Link
                   to="/tien-do"
-                  className="btn btn-outline btn-sm hide-mobile"
+                  className="quick-action-btn"
                   title="Tiến độ học tập"
+                  aria-label="Tiến độ học tập"
                 >
-                  <TrendingUp size={16} />
+                  <TrendingUp size={17} />
                 </Link>
+
                 <Link
                   to="/quan-ly-dat-lich"
-                  className="btn btn-outline btn-sm hide-mobile"
+                  className="quick-action-btn"
                   title="Quản lý đặt lịch"
+                  aria-label="Quản lý đặt lịch"
                 >
-                  <Calendar size={16} />
+                  <Calendar size={17} />
                 </Link>
-                <Link
-                  to="/ho-so"
-                  className="header__avatar"
-                  title="Hồ sơ cá nhân"
-                >
-                  <img
-                    src={user?.avatar_url || `https://ui-avatars.com/api/?name=${user?.full_name || 'User'}&background=random`}
-                    alt="Avatar"
-                    className="avatar avatar-sm"
-                  />
-                  <span className="user-name hide-mobile">{user?.full_name}</span>
-                </Link>
-                <button 
-                  onClick={() => logout()}
-                  className="btn btn-outline btn-sm hide-mobile" 
-                  title="Đăng xuất"
-                >
-                  <LogOut size={16} />
-                </button>
+
               </div>
+
+              {/* =========================
+                  USER
+              ========================= */}
+              <Link
+                to="/ho-so"
+                className="header__avatar"
+                title="Hồ sơ cá nhân"
+              >
+                <img
+                  src={avatarUrl}
+                  alt="Avatar"
+                  className="avatar avatar-sm"
+                />
+
+                <span className="user-name">
+                  {user?.full_name || 'Người dùng'}
+                </span>
+              </Link>
+
+              {/* Logout */}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="logout-btn"
+                title="Đăng xuất"
+                aria-label="Đăng xuất"
+              >
+                <LogOut size={17} />
+              </button>
             </>
-
           ) : (
-
             <>
-              {/* Đăng nhập */}
-
+              {/* Login */}
               <Link
                 to="/dang-nhap"
-                className="btn btn-outline btn-sm hide-mobile"
+                className="btn btn-outline btn-sm login-btn"
                 id="header-login-btn"
               >
                 <LogIn size={16} />
-
-                Đăng nhập
+                <span>Đăng nhập</span>
               </Link>
 
-
-              {/* Đăng ký */}
-
+              {/* Register */}
               <Link
                 to="/dang-ky"
-                className="btn btn-primary btn-sm"
+                className="btn btn-primary btn-sm register-btn"
                 id="header-register-btn"
               >
                 <User size={16} />
-
-                <span className="hide-mobile">
-                  Đăng ký
-                </span>
+                <span>Đăng ký</span>
               </Link>
             </>
-
           )}
 
-
-          {/* ================= MOBILE BUTTON ================= */}
-
+          {/* =========================
+              MOBILE BUTTON
+          ========================= */}
           <button
             className="mobile-menu-btn"
             id="mobile-menu-toggle"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Mở menu"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label={
+              mobileOpen ? 'Đóng menu' : 'Mở menu'
+            }
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? (
-              <X size={24} />
+              <X size={23} />
             ) : (
-              <Menu size={24} />
+              <Menu size={23} />
             )}
           </button>
-
         </div>
-
       </div>
 
-
-      {/* ================= MOBILE MENU ================= */}
-
+      {/* =========================
+          MOBILE MENU
+      ========================= */}
       <div
-        className={`mobile-menu ${mobileOpen ? 'open' : ''
-          }`}
+        className={`mobile-menu ${
+          mobileOpen ? 'open' : ''
+        }`}
       >
-
         <nav className="mobile-nav">
 
+          {/* Navigation */}
           {navLinks.map((link) => (
-
             <NavLink
               key={link.to}
               to={link.to}
               end={link.to === '/'}
               className={({ isActive }) =>
-                `mobile-nav-link ${isActive ? 'active' : ''
+                `mobile-nav-link ${
+                  isActive ? 'active' : ''
                 }`
               }
               onClick={closeMobileMenu}
             >
               {link.label}
             </NavLink>
-
           ))}
 
-
-          {/* ================= MOBILE ACTIONS ================= */}
-
+          {/* =========================
+              MOBILE USER ACTIONS
+          ========================= */}
           <div className="mobile-nav-actions">
+
             {isLoggedIn ? (
               <>
-                <Link to="/quan-ly-dat-lich" className="btn btn-outline btn-full" onClick={closeMobileMenu}>
+                <Link
+                  to="/ho-so"
+                  className="mobile-user-card"
+                  onClick={closeMobileMenu}
+                >
+                  <img
+                    src={avatarUrl}
+                    alt="Avatar"
+                    className="avatar avatar-md"
+                  />
+
+                  <div>
+                    <strong>
+                      {user?.full_name || 'Người dùng'}
+                    </strong>
+
+                    <span>
+                      {isAdmin ? 'Quản trị viên' : 'Tài khoản'}
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  to="/quan-ly-dat-lich"
+                  className="btn btn-outline btn-full"
+                  onClick={closeMobileMenu}
+                >
+                  <Calendar size={17} />
                   Quản lý lịch học
                 </Link>
-                {user?.role === 'admin' && (
-                  <Link to="/admin" className="btn btn-outline btn-full" onClick={closeMobileMenu}>
-                    Quản trị hệ thống
-                  </Link>
+
+                <Link
+                  to="/tien-do"
+                  className="btn btn-outline btn-full"
+                  onClick={closeMobileMenu}
+                >
+                  <TrendingUp size={17} />
+                  Tiến độ học tập
+                </Link>
+
+                {isAdmin && (
+                  <>
+                    <Link
+                      to="/admin"
+                      className="btn btn-outline btn-full"
+                      onClick={closeMobileMenu}
+                    >
+                      <ShieldCheck size={17} />
+                      Quản trị hệ thống
+                    </Link>
+
+                    <Link
+                      to="/admin/duyet-gia-su"
+                      className="btn btn-warning-full"
+                      onClick={closeMobileMenu}
+                    >
+                      <UserCheck size={17} />
+                      Duyệt gia sư
+                    </Link>
+                  </>
                 )}
-                <button className="btn btn-primary btn-full" onClick={() => { logout(); closeMobileMenu(); navigate('/'); }}>
+
+                <button
+                  type="button"
+                  className="btn btn-danger-full"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={17} />
                   Đăng xuất
                 </button>
               </>
             ) : (
               <>
-                <Link to="/dang-nhap" className="btn btn-outline btn-full" onClick={closeMobileMenu}>
+                <Link
+                  to="/dang-nhap"
+                  className="btn btn-outline btn-full"
+                  onClick={closeMobileMenu}
+                >
+                  <LogIn size={17} />
                   Đăng nhập
                 </Link>
-                <Link to="/dang-ky" className="btn btn-primary btn-full" onClick={closeMobileMenu}>
+
+                <Link
+                  to="/dang-ky"
+                  className="btn btn-primary btn-full"
+                  onClick={closeMobileMenu}
+                >
+                  <User size={17} />
                   Đăng ký ngay
                 </Link>
               </>
             )}
 
           </div>
-
         </nav>
-
       </div>
 
-
-      {/* ================= MOBILE OVERLAY ================= */}
-
+      {/* =========================
+          MOBILE OVERLAY
+      ========================= */}
       {mobileOpen && (
         <div
           className="mobile-overlay"
           onClick={closeMobileMenu}
         />
       )}
-
     </header>
   );
 }
