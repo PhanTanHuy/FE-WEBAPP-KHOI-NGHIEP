@@ -30,35 +30,41 @@ def create_feedback(
     Người dùng có thể gửi feedback mà không cần đăng nhập.
     """
 
-    feedback = FeedbackSubmission(
-        role=feedback_data.role,
-        source=feedback_data.source,
-        purpose=feedback_data.purpose,
-        found_information=feedback_data.found_information,
-        ease_of_use=feedback_data.ease_of_use,
+    try:
+        feedback = FeedbackSubmission(
+            role=feedback_data.role,
+            source=feedback_data.source,
+            purpose=feedback_data.purpose,
+            found_information=feedback_data.found_information,
+            ease_of_use=feedback_data.ease_of_use,
 
-        # Frontend gửi interested_features
-        # nhưng database lưu desired_features
-        desired_features=(
-            ", ".join(feedback_data.interested_features)
-            if feedback_data.interested_features
-            else None
-        ),
+            # Frontend gửi interested_features
+            # nhưng database lưu desired_features
+            desired_features=(
+                ", ".join(feedback_data.interested_features)
+                if feedback_data.interested_features
+                else None
+            ),
 
-        tutor_priority=feedback_data.tutor_priority,
-        price_range=feedback_data.price_range,
-        trust_level=feedback_data.trust_level,
-        usage_intention=feedback_data.usage_intention,
-        difficulty=feedback_data.difficulty,
+            tutor_priority=feedback_data.tutor_priority,
+            price_range=feedback_data.price_range,
+            trust_level=feedback_data.trust_level,
+            usage_intention=feedback_data.usage_intention,
+            difficulty=feedback_data.difficulty,
 
-        contact_requested=feedback_data.contact_requested,
-        contact_value=feedback_data.contact_value,
+            contact_requested=feedback_data.contact_requested,
+            contact_value=feedback_data.contact_value,
 
-        answers=feedback_data.answers
-    )
+            answers=feedback_data.answers or {}
+        )
 
-    db.add(feedback)
-    db.commit()
-    db.refresh(feedback)
-
-    return feedback
+        db.add(feedback)
+        db.commit()
+        db.refresh(feedback)
+        return feedback
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Lỗi khi lưu góp ý: {str(e)}"
+        )

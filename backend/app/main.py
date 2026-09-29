@@ -45,6 +45,18 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
+from app.database import engine
+from app.models.models import Base
+
+@app.on_event("startup")
+def on_startup():
+    try:
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables initialized/verified successfully.")
+    except Exception as e:
+        logger.error(f"Error initializing database tables: {e}")
+
+
 # CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,

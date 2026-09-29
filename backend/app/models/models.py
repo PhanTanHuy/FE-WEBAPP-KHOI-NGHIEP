@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, String, Text, Boolean, Float, ForeignKey, Table, DateTime, Time, Date
+    Column, Integer, String, Text, Boolean, Float, ForeignKey, Table, DateTime, Time, Date, JSON
 )
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -407,5 +407,5 @@ class FeedbackSubmission(Base):
     contact_requested = Column(Boolean, default=False, nullable=False)
     contact_value = Column(String(255), nullable=True)
 
-    answers = Column(JSONB, default=dict, nullable=False)
+    answers = Column(JSON().with_variant(JSONB, "postgresql"), default=dict, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

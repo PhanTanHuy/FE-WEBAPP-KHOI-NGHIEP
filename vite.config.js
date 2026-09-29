@@ -7,11 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://be-educonnect-tipp.onrender.com',
+        target: 'https://educonnect-backend-p3mf.onrender.com',
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'https://be-educonnect-tipp.onrender.com',
+        target: 'https://educonnect-backend-p3mf.onrender.com',
         changeOrigin: true,
       },
     },
