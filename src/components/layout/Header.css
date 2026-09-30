@@ -608,7 +608,9 @@
     padding: 0;
   }
 }
-
+.header .login-btn {
+  display: none;
+}
 
 /* =========================================================
    MOBILE
@@ -644,9 +646,6 @@
     display: none;
   }
 
-  .login-btn {
-    display: none;
-  }
 
   .register-btn {
     display: inline-flex;
