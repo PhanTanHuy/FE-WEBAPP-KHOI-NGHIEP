@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ChatBot from './components/chatbot/ChatBot';
 
 import './App.css';
 
@@ -36,150 +37,157 @@ function App() {
       <Layout>
 
         <Suspense fallback={<div className="page-loading">Đang tải...</div>}>
-        <Routes>
+          <Routes>
 
-          {/* ================= TRANG CHỦ ================= */}
+            {/* ================= TRANG CHỦ ================= */}
 
-          <Route
-            path="/"
-            element={<HomePage />}
-          />
-
-
-          {/* ================= GIỚI THIỆU ================= */}
-
-          <Route
-            path="/gioi-thieu"
-            element={<AboutPage />}
-          />
+            <Route
+              path="/"
+              element={<HomePage />}
+            />
 
 
-          {/* ================= TÌM GIA SƯ ================= */}
+            {/* ================= GIỚI THIỆU ================= */}
 
-          <Route
-            path="/tim-gia-su"
-            element={<FindTutorPage />}
-          />
-
-
-          {/* ================= CHI TIẾT GIA SƯ ================= */}
-
-          <Route
-            path="/gia-su/:id"
-            element={<TutorDetailPage />}
-          />
+            <Route
+              path="/gioi-thieu"
+              element={<AboutPage />}
+            />
 
 
-          {/* ================= DỊCH VỤ ================= */}
+            {/* ================= TÌM GIA SƯ ================= */}
 
-          <Route
-            path="/dich-vu"
-            element={<ServicePage />}
-          />
-          <Route
-            path="/gia-su-online"
-            element={<OnlineTutorPage />}
-          />
-          <Route
-            path="/gia-su-tai-nha"
-            element={<HomeTutorPage />}
-          />
-          <Route
-            path="/dua-don-hoc-sinh"
-            element={<RideHailingPage />}
-          />
-          <Route
-            path="/hoc-thu"
-            element={<TrialPage />}
-          />
-          {/* ================= ĐẶT LỊCH ================= */}
-
-          <Route
-            path="/dat-lich"
-            element={<ProtectedRoute><BookingPage /></ProtectedRoute>}
-          />
-          <Route
-            path="/quan-ly-dat-lich"
-            element={<ProtectedRoute><BookingsDashboardPage /></ProtectedRoute>}
-          />
+            <Route
+              path="/tim-gia-su"
+              element={<FindTutorPage />}
+            />
 
 
-          {/* ================= TÀI LIỆU HỌC TẬP ================= */}
+            {/* ================= CHI TIẾT GIA SƯ ================= */}
 
-          <Route
-            path="/tai-lieu"
-            element={<StudyMaterialsPage />}
-          />
-
-
-          {/* ================= LIÊN HỆ ================= */}
-
-          <Route
-            path="/lien-he"
-            element={<ContactPage />}
-          />
+            <Route
+              path="/gia-su/:id"
+              element={<TutorDetailPage />}
+            />
 
 
-          {/* ================= CÁC TRANG KHÁC ================= */}
+            {/* ================= DỊCH VỤ ================= */}
 
-          <Route
-            path="/dang-ky-gia-su"
-            element={
-              <TutorRegisterPage />
-            }
-          />
+            <Route
+              path="/dich-vu"
+              element={<ServicePage />}
+            />
+            <Route
+              path="/gia-su-online"
+              element={<OnlineTutorPage />}
+            />
+            <Route
+              path="/gia-su-tai-nha"
+              element={<HomeTutorPage />}
+            />
+            <Route
+              path="/dua-don-hoc-sinh"
+              element={<RideHailingPage />}
+            />
+            <Route
+              path="/hoc-thu"
+              element={<TrialPage />}
+            />
+            {/* ================= ĐẶT LỊCH ================= */}
 
-          <Route
-            path="/tien-do"
-            element={
-              <ProtectedRoute><ProgressPage /></ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/danh-gia"
-            element={
-              <ProtectedRoute><ReviewPage /></ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/dang-nhap"
-            element={
-              <LoginPage />
-            }
-          />
-
-          <Route
-            path="/dang-ky"
-            element={
-              <RegisterPage />
-            }
-          />
-
-          <Route
-            path="/admin/duyet-gia-su"
-            element={
-              <ProtectedRoute roles={['admin']}><AdminTutorApplicationsPage /></ProtectedRoute>
-            }
-          />
-          <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/analytics" element={<ProtectedRoute roles={['admin']}><AnalyticsDashboard /></ProtectedRoute>} />
+            <Route
+              path="/dat-lich"
+              element={<ProtectedRoute><BookingPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/quan-ly-dat-lich"
+              element={<ProtectedRoute><BookingsDashboardPage /></ProtectedRoute>}
+            />
 
 
-          {/* ================= 404 ================= */}
+            {/* ================= TÀI LIỆU HỌC TẬP ================= */}
 
-          <Route
-            path="*"
-            element={
-              <NotFoundPage />
-            }
-          />
+            <Route
+              path="/tai-lieu"
+              element={<StudyMaterialsPage />}
+            />
 
-        </Routes>
+
+            {/* ================= LIÊN HỆ ================= */}
+
+            <Route
+              path="/lien-he"
+              element={<ContactPage />}
+            />
+
+
+            {/* ================= CÁC TRANG KHÁC ================= */}
+
+            <Route
+              path="/dang-ky-gia-su"
+              element={
+                <TutorRegisterPage />
+              }
+            />
+
+            <Route
+              path="/tien-do"
+              element={
+                <ProtectedRoute><ProgressPage /></ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/danh-gia"
+              element={
+                <ProtectedRoute><ReviewPage /></ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/dang-nhap"
+              element={
+                <LoginPage />
+              }
+            />
+
+            <Route
+              path="/dang-ky"
+              element={
+                <RegisterPage />
+              }
+            />
+
+            <Route
+              path="/admin/duyet-gia-su"
+              element={
+                <ProtectedRoute roles={['admin']}><AdminTutorApplicationsPage /></ProtectedRoute>
+              }
+            />
+            <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/analytics" element={<ProtectedRoute roles={['admin']}><AnalyticsDashboard /></ProtectedRoute>} />
+
+
+            {/* ================= 404 ================= */}
+
+            <Route
+              path="*"
+              element={
+                <NotFoundPage />
+              }
+            />
+
+          </Routes>
         </Suspense>
 
       </Layout>
+
+      {/* Chatbot – ẩn ở trang đăng nhập/đăng ký, thêm route vào mảng nếu muốn ẩn thêm */}
+      <ChatBot
+        excludedRoutes={['/dang-nhap', '/dang-ky']}
+        botName="EduConnect AI"
+      />
+
     </Router>
   );
 }
